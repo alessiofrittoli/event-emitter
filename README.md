@@ -1,56 +1,38 @@
-# Node Module Starter 🛠️
+# Event Emitter 🔊
 
-Version 1.1.0
+Version 0.1.0
 
-[![Coverage Status](https://coveralls.io/repos/github/alessiofrittoli/node-module-starter/badge.svg)](https://coveralls.io/github/alessiofrittoli/node-module-starter) [![Dependencies](https://img.shields.io/librariesio/release/npm/%40alessiofrittoli%2Fnode-module-starter)](https://libraries.io/npm/%40alessiofrittoli%2Fnode-module-starter)
+## Cross-env TypeScript Event Emitter
 
-## Starter repository for developing node_modules
+The `EventEmitter` class provides a mechanism to handle events and their listeners.
+It allows you to register event listeners, emit events, and manage the listeners for those events.
+
+This class is an exact implementation of the `EventEmitter` class from 'node:events'
+but it is supported on different environments like browsers, Edge Runtime and Node.js.
 
 ### Table of Contents
 
 - [Getting started](#getting-started)
-- [Development](#development)
-	- [ESLint](#eslint)
-	- [Jest](#jest)
-- [Contributing](#contributing)
 - [Security](#security)
 - [Credits](#made-with-)
 
 ---
 
-### Getting started (delete once cloned in your project)
+### Getting started
 
-Run the following command to start using `node-module-starter` for your projects:
-
-```bash
-git clone git@github.com:alessiofrittoli/node-module-starter.git && git remote remove origin
-```
-
-install dependencies
+Run the following command to start using `event-emitter` in your projects:
 
 ```bash
-pnpm i
-```
-
-Read the [Creating a repository from a template - GitHub Docs](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template) for more in-detail informations about creating a new Repository from a template using GitHub web interface.
-
----
-
-### Getting started (customize based on your project needs)
-
-Run the following command to start using `{package_name}` in your projects:
-
-```bash
-npm i {package_name}
+npm i @alessiofrittoli/event-emitter
 ```
 
 or using `pnpm`
 
 ```bash
-pnpm i {package_name}
+pnpm i @alessiofrittoli/event-emitter
 ```
 
----
+<!-- ---
 
 ### Development
 
@@ -124,7 +106,7 @@ test:coverage:serve
 Contributions are truly welcome!\
 Please refer to the [Contributing Doc](./CONTRIBUTING.md) for more information on how to start contributing to this project.
 
----
+--- -->
 
 ### Security
 

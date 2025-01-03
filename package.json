@@ -1,7 +1,7 @@
 {
-	"name": "@alessiofrittoli/node-module-starter",
-	"version": "1.1.0",
-	"description": "Basic Node Module repository",
+	"name": "@alessiofrittoli/event-emitter",
+	"version": "0.1.0",
+	"description": "Cross-env TypeScript Event Emitter",
 	"author": {
 		"name": "Alessio Frittoli",
 		"email": "info@alessiofrittoli.it",
@@ -13,14 +13,14 @@
 		"npm",
 		"node_modules"
 	],
-	"homepage": "https://github.com/alessiofrittoli/node-module-starter#readme",
+	"homepage": "https://github.com/alessiofrittoli/event-emitter#readme",
 	"bugs": {
-		"url": "https://github.com/alessiofrittoli/node-module-starter/issues",
+		"url": "https://github.com/alessiofrittoli/event-emitter/issues",
 		"email": "info@alessiofrittoli.it"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/alessiofrittoli/node-module-starter.git"
+		"url": "git+https://github.com/alessiofrittoli/event-emitter.git"
 	},
 	"main": "./dist/index.js",
 	"module": "./dist/index.mjs",
@@ -53,7 +53,7 @@
 		"@eslint/js": "^9.17.0",
 		"@jest/globals": "^29.7.0",
 		"@types/jest": "^29.5.14",
-		"@types/node": "^22.10.2",
+		"@types/node": "^22.10.5",
 		"concurrently": "^9.1.2",
 		"dotenv": "^16.4.7",
 		"eslint": "^9.17.0",
