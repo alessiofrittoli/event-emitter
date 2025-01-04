@@ -2,6 +2,8 @@
 
 Version 0.1.0
 
+[![Coverage Status](https://coveralls.io/repos/github/alessiofrittoli/event-emitter/badge.svg)](https://coveralls.io/github/alessiofrittoli/event-emitter) [![Dependencies](https://img.shields.io/librariesio/release/npm/%40alessiofrittoli%2Fevent-emitter)](https://libraries.io/npm/%40alessiofrittoli%2Fevent-emitter)
+
 ## Cross-env TypeScript Event Emitter
 
 The `EventEmitter` class provides a mechanism to handle events and their listeners.
