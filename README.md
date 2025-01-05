@@ -1,6 +1,6 @@
 # Event Emitter 🔊
 
-Version 0.1.1
+Version 0.2.0
 
 [![Coverage Status](https://coveralls.io/repos/github/alessiofrittoli/event-emitter/badge.svg)](https://coveralls.io/github/alessiofrittoli/event-emitter) [![Dependencies](https://img.shields.io/librariesio/release/npm/%40alessiofrittoli%2Fevent-emitter)](https://libraries.io/npm/%40alessiofrittoli%2Fevent-emitter)
 
