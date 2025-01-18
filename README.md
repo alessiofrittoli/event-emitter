@@ -1,8 +1,14 @@
 # Event Emitter 🔊
 
-Version 0.2.0
+[![NPM Latest Version][version-badge]][npm-url] [![Coverage Status][coverage-badge]][coverage-url] [![NPM Monthly Downloads][downloads-badge]][npm-url] [![Dependencies][deps-badge]][deps-url]
 
-[![Coverage Status](https://coveralls.io/repos/github/alessiofrittoli/event-emitter/badge.svg)](https://coveralls.io/github/alessiofrittoli/event-emitter) [![Dependencies](https://img.shields.io/librariesio/release/npm/%40alessiofrittoli%2Fevent-emitter)](https://libraries.io/npm/%40alessiofrittoli%2Fevent-emitter)
+[version-badge]: https://img.shields.io/npm/v/%40alessiofrittoli%2Fevent-emitter
+[npm-url]: https://npmjs.org/package/%40alessiofrittoli%2Fevent-emitter
+[coverage-badge]: https://coveralls.io/repos/github/alessiofrittoli/event-emitter/badge.svg
+[coverage-url]: https://coveralls.io/github/alessiofrittoli/event-emitter
+[downloads-badge]: https://img.shields.io/npm/dm/%40alessiofrittoli%2Fevent-emitter.svg
+[deps-badge]: https://img.shields.io/librariesio/release/npm/%40alessiofrittoli%2Fevent-emitter
+[deps-url]: https://libraries.io/npm/%40alessiofrittoli%2Fevent-emitter
 
 ## Cross-env TypeScript Event Emitter
 
@@ -15,14 +21,14 @@ It allows you to register event listeners, emit events, and manage the listeners
 
 - [Getting started](#getting-started)
 - [API Reference](#api-reference)
-	- [`EventEmitter` Class](#eventemitter-class)
-		- [Constructor](#constructor)
-		- [Methods](#methods)
-	- [Types](#types)
-	- [Examples](#examples)
+  - [`EventEmitter` Class](#eventemitter-class)
+    - [Constructor](#constructor)
+    - [Methods](#methods)
+  - [Types](#types)
+  - [Examples](#examples)
 - [Development](#development)
-	- [ESLint](#eslint)
-	- [Jest](#jest)
+  - [ESLint](#eslint)
+  - [Jest](#jest)
 - [Contributing](#contributing)
 - [Security](#security)
 - [Credits](#made-with-)
@@ -480,15 +486,15 @@ import type { Listener } from '@alessiofrittoli/event-emitter'
 // Define an event map for your EventEmitter
 interface MyEvents
 {
-    greet       : [ name: string ]  // The 'greet' event takes a string argument
-    farewell    : [ name: Error ]   // The 'farewell' event also takes a string argument
-    error       : [ error: Error ]  // The 'error' event takes an Error argument
+  greet     : [ name: string ]  // The 'greet' event takes a string argument
+  farewell  : [ name: Error ]   // The 'farewell' event also takes a string argument
+  error     : [ error: Error ]  // The 'error' event takes an Error argument
 }
 
 // Optionally define listeners types
-type OnGreetEventListener       = Listener<MyEvents, 'greet'>
-type OnFarewellEventListener    = Listener<MyEvents, 'farewell'>
-type OnErrorEventListener       = Listener<MyEvents, 'error'>
+type OnGreetEventListener     = Listener<MyEvents, 'greet'>
+type OnFarewellEventListener  = Listener<MyEvents, 'farewell'>
+type OnErrorEventListener     = Listener<MyEvents, 'error'>
 ```
 
 </details>
@@ -502,17 +508,17 @@ type OnErrorEventListener       = Listener<MyEvents, 'error'>
 
 ```ts
 const greetListener: OnGreetEventListener = name => {
-    console.log( `Hello, ${ name }!` )
+  console.log( `Hello, ${ name }!` )
 }
 
 
 const farewellListener: OnFarewellEventListener = name => {
-    console.log( `Goodbye, ${ name }!` )
+  console.log( `Goodbye, ${ name }!` )
 }
 
 
 const errorListener: OnErrorEventListener = error => {
-    console.error( 'Something went wrong.', error.message )
+  console.error( 'Something went wrong.', error.message )
 }
 ```
 
@@ -554,7 +560,7 @@ const emitter = new EventEmitter<MyEvents>()
 
 // Define a listener for the 'greet' event that should only be called once
 const greetOnceListener: OnGreetEventListener = name => {
-    console.log( `Once Hello, ${ name }!` )
+  console.log( `Once Hello, ${ name }!` )
 }
 
 emitter.once( 'greet', greetOnceListener )
@@ -579,14 +585,14 @@ emitter.emit( 'greet', 'Bob' )
 const emitter = new EventEmitter<MyEvents>( { captureRejections: true } )
 
 const greetListener: OnGreetEventListener = name => {
-    if ( name === 'He-Who-Must-Not-Be-Named' ) {
-        throw new Error( 'nooose!' )
-    }
-    console.log( `Howdy, ${ name }!` )
+  if ( name === 'He-Who-Must-Not-Be-Named' ) {
+    throw new Error( 'nooose!' )
+  }
+  console.log( `Howdy, ${ name }!` )
 }
 
 const errorListener: OnErrorEventListener = error => {
-    console.error( 'Caught your', error.message )
+  console.error( 'Caught your', error.message )
 }
 
 
@@ -611,22 +617,22 @@ emitter.emit( 'greet', 'He-Who-Must-Not-Be-Named' )
 
 ```ts
 const emitter = (
-    new EventEmitter<MyEvents>()
-        .setMaxListeners( 1 )
+  new EventEmitter<MyEvents>()
+    .setMaxListeners( 1 )
 )
 
 const greetListener1: OnGreetEventListener = name => {
-    console.log( `Hello, ${ name }!` )
+  console.log( `Hello, ${ name }!` )
 }
 
 
 const greetListener2: OnGreetEventListener = name => {
-    console.log( `Hi, ${ name }!` )
+  console.log( `Hi, ${ name }!` )
 }
 
 
 const greetListener3: OnGreetEventListener = name => {
-    console.log( `Howdy, ${ name }!` )
+  console.log( `Howdy, ${ name }!` )
 }
 
 
@@ -657,13 +663,13 @@ const emitter = new EventEmitter<MyEvents>()
 
 // Attach listeners
 emitter.on( 'greet', name => {
-    console.log( `A: Hello! Better late than never ${ name }.` )
+  console.log( `A: Hello! Better late than never ${ name }.` )
 } )
 emitter.prepend( 'greet', name => {
-    console.log( `B: Hello, ${ name }!` )
+  console.log( `B: Hello, ${ name }!` )
 } )
 emitter.prependOnce( 'greet', name => {
-    console.log( `C: Once Hello, ${ name }! I won't say hello to you, Bar.` )
+  console.log( `C: Once Hello, ${ name }! I won't say hello to you, Bar.` )
 } )
 
 // Emit events
@@ -688,10 +694,10 @@ emitter.emit( 'greet', 'Bar' )
 
 ```ts
 const emitter = (
-    new EventEmitter<MyEvents>()
-        .on( 'greet', () => {} )
-        .on( 'greet', () => {} )
-        .on( 'farewell', () => {} )
+  new EventEmitter<MyEvents>()
+    .on( 'greet', () => {} )
+    .on( 'greet', () => {} )
+    .on( 'farewell', () => {} )
 )
 
 console.log( emitter.listenerCount( 'greet' ) )     // Outputs: `2`
@@ -711,10 +717,10 @@ const callback1 = () => {}
 const callback2 = () => {}
 
 const emitter = (
-    new EventEmitter<MyEvents>()
-        .on( 'greet', callback1 )
-        .on( 'greet', callback1 )
-        .on( 'greet', callback2 )
+  new EventEmitter<MyEvents>()
+    .on( 'greet', callback1 )
+    .on( 'greet', callback1 )
+    .on( 'greet', callback2 )
 )
 
 console.log( emitter.listenerCount( 'greet', callback1 ) ) // Outputs: `2`
@@ -737,10 +743,10 @@ const callback1 = () => {}
 const callback2 = () => {}
 
 const emitter = (
-    new EventEmitter<MyEvents>()
-        .on( 'greet', callback1 )
-        .once( 'greet', callback2 )
-        .on( 'farewell', callback1 )
+  new EventEmitter<MyEvents>()
+    .on( 'greet', callback1 )
+    .once( 'greet', callback2 )
+    .on( 'farewell', callback1 )
 )
 const functions = emitter.listeners( 'greet' ) // Listener<MyEvents, 'greet'>[]
 
@@ -748,7 +754,7 @@ console.log( functions )
 // Outputs: `[ [Function: callback1], [Function: callback2] ]`
 
 functions.map( listener => {
-    listener() // manually execute the listener.
+  listener() // manually execute the listener.
 } )
 ```
 
@@ -766,10 +772,10 @@ const callback1 = () => {}
 const callback2 = () => {}
 
 const emitter = (
-    new EventEmitter<MyEvents>()
-        .on( 'greet', callback1 )
-        .once( 'greet', callback2 )
-        .on( 'farewell', callback1 )
+  new EventEmitter<MyEvents>()
+    .on( 'greet', callback1 )
+    .once( 'greet', callback2 )
+    .on( 'farewell', callback1 )
 )
 
 const functions = emitter.rawListeners( 'greet' ) // ( Listener<MyEvents, 'greet'> | OnceListenerWrapper<MyEvents, 'greet'> )[]
@@ -778,13 +784,13 @@ console.log( functions )
 // Outputs: `[ [Function: callback1], [Function: onceWrapper] { listener: [Function: callback2] } ]`
 
 functions.map( callback => {
-    /** Manually execute the listener. If this is a `onceWrapper` function, it will remove the listener from the listeners array and then execute the original listener function. */
-    callback()
+  /** Manually execute the listener. If this is a `onceWrapper` function, it will remove the listener from the listeners array and then execute the original listener function. */
+  callback()
 
-    /** Or execute the original listener without removing it from the listeners array. */
-    if ( 'listener' in callback ) {
-        callback.listener()
-    }
+  /** Or execute the original listener without removing it from the listeners array. */
+  if ( 'listener' in callback ) {
+    callback.listener()
+  }
 } )
 ```
 
@@ -799,10 +805,10 @@ functions.map( callback => {
 
 ```ts
 const emitter = (
-    new EventEmitter<MyEvents>()
-        .on( 'greet', () => {} )
-        .once( 'greet', () => {} )
-        .on( 'farewell', () => {} )
+  new EventEmitter<MyEvents>()
+    .on( 'greet', () => {} )
+    .once( 'greet', () => {} )
+    .on( 'farewell', () => {} )
 )
 
 console.log( emitter.listenerCount( 'greet' ) )     // Outputs: `2`
@@ -825,11 +831,11 @@ console.log( emitter.listenerCount( 'error' ) )     // Outputs: `0`
 
 ```ts
 const emitter = (
-    new EventEmitter<MyEvents>()
-        .on( 'greet', () => {} )
-        .once( 'greet', () => {} )
-        .on( 'farewell', () => {} )
-        .removeAllListeners( 'greet' )
+  new EventEmitter<MyEvents>()
+    .on( 'greet', () => {} )
+    .once( 'greet', () => {} )
+    .on( 'farewell', () => {} )
+    .removeAllListeners( 'greet' )
 )
 
 console.log( emitter.listenerCount( 'greet' ) )     // Outputs: `0`
@@ -849,12 +855,12 @@ const callback1 = () => {}
 const callback2 = () => {}
 
 const emitter = (
-    new EventEmitter<MyEvents>()
-        .on( 'greet', callback1 )
-        .once( 'greet', callback1 )
-        .once( 'greet', callback2 )
-        .on( 'farewell', callback1 )
-        .removeAllListeners( 'greet', callback1 )
+  new EventEmitter<MyEvents>()
+    .on( 'greet', callback1 )
+    .once( 'greet', callback1 )
+    .once( 'greet', callback2 )
+    .on( 'farewell', callback1 )
+    .removeAllListeners( 'greet', callback1 )
 )
 
 console.log( emitter.listenerCount( 'greet' ) )     // Outputs: `1`
@@ -941,30 +947,30 @@ If you believe you have found a security vulnerability, we encourage you to **_r
 ### Made with ☕
 
 <table style='display:flex;gap:20px;'>
-    <tbody>
-        <tr>
-            <td>
-                <img src='https://avatars.githubusercontent.com/u/35973186' style='width:60px;border-radius:50%;object-fit:contain;'>
-            </td>
-            <td>
-                <table style='display:flex;gap:2px;flex-direction:column;'>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <a href='https://github.com/alessiofrittoli' target='_blank' rel='noopener'>Alessio Frittoli</a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <small>
-                                    <a href='https://alessiofrittoli.it' target='_blank' rel='noopener'>https://alessiofrittoli.it</a> |
-                                    <a href='mailto:info@alessiofrittoli.it' target='_blank' rel='noopener'>info@alessiofrittoli.it</a>
-                                </small>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </td>
-        </tr>
-    </tbody>
+  <tbody>
+    <tr>
+      <td>
+        <img alt="avatar" src='https://avatars.githubusercontent.com/u/35973186' style='width:60px;border-radius:50%;object-fit:contain;'>
+      </td>
+      <td>
+        <table style='display:flex;gap:2px;flex-direction:column;'>
+          <tbody>
+              <tr>
+                <td>
+                  <a href='https://github.com/alessiofrittoli' target='_blank' rel='noopener'>Alessio Frittoli</a>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <small>
+                    <a href='https://alessiofrittoli.it' target='_blank' rel='noopener'>https://alessiofrittoli.it</a> |
+                    <a href='mailto:info@alessiofrittoli.it' target='_blank' rel='noopener'>info@alessiofrittoli.it</a>
+                  </small>
+                </td>
+              </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  </tbody>
 </table>
