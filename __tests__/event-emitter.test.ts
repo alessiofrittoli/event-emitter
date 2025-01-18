@@ -61,6 +61,38 @@ describe( 'EventEmitter', () => {
 	} )
 
 
+	it( 'doesn\'t emit `error` event with `captureRejections` when an error is thrown in an `error` event listener avoiding infinite loop', () => {
+
+		let mockErrorCallback
+
+		const callback = () => {
+			
+			const errorEmitter = new EventEmitter<MyEvents>( { captureRejections: true } )
+			
+			errorEmitter.on( 'erroredEvent', () => {
+				throw new Error( 'Test error' )
+			} )
+			mockErrorCallback = jest.fn( error => {
+				throw new Error( 'Re-thrown error', { cause: error } )
+			} )
+
+			errorEmitter.on( 'error', mockErrorCallback )
+			errorEmitter.emit( 'erroredEvent', 'Hello, World!' )	
+
+		}
+
+		try {
+			callback()
+		} catch ( err ) {
+			const error = err as Error
+			expect( error ).toEqual( new Error( 'Re-thrown error', { cause: new Error( 'Test error' ) } ) )
+			expect( mockErrorCallback )
+				.toHaveBeenCalledTimes( 1 )
+		}
+		
+	} )
+
+
 	it( 're-throws errors when captureRejections is `false` or not set', () => {
 		
 		const errorEmitter		= new EventEmitter<MyEvents>()
