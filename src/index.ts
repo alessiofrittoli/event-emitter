@@ -299,18 +299,17 @@ export class EventEmitter<T extends EventsMap<T> = DefaultEventMap>
 		this.events[ event ].forEach( listener => {
 			try {
 				const result = listener( ...args )
-				if ( this.captureRejections && result instanceof Promise ) {
+				if ( this.captureRejections && result instanceof Promise && event !== 'error' ) {
 					result.catch( error => this.emit( 'error' as K, ...[ error ] as Args<K, T> ) )
 				}
 			} catch ( err ) {
 				const error = err as Error
-				if ( this.captureRejections ) {
+				if ( this.captureRejections && event !== 'error' ) {
 					this.emit( 'error' as K, ...[ error ] as Args<K, T> )
 				} else {
 					throw error
 				}
 			}
-
 		} )
 
 		return true
