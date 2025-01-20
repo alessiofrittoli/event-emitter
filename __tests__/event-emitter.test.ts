@@ -158,6 +158,14 @@ describe( 'EventEmitter', () => {
 
 	it( 'doesn\'t emit any warning if `maxListeners` is set to `0` or `Infinity`', () => {
 		const warnSpy = jest.spyOn( process, 'emitWarning' ).mockImplementation()
+		emitter[ 'emitMaxListenersExceeded' ]( 'event' )
+		expect( warnSpy ).not.toHaveBeenCalled()
+		warnSpy.mockRestore()
+	} )
+	
+	
+	it( 'doesn\'t emit any warning if `emitMaxListenersExceeded` get called when no listener has been registered for the given event', () => {
+		const warnSpy = jest.spyOn( process, 'emitWarning' ).mockImplementation()
 		emitter.setMaxListeners( 0 )
 		actWarningEmit()
 		emitter.setMaxListeners( Infinity )
