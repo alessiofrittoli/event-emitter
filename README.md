@@ -1,6 +1,6 @@
 # Event Emitter 🔊
 
-[![NPM Latest Version][version-badge]][npm-url] [![Coverage Status][coverage-badge]][coverage-url] [![NPM Monthly Downloads][downloads-badge]][npm-url] [![Dependencies][deps-badge]][deps-url]
+[![NPM Latest Version][version-badge]][npm-url] [![Coverage Status][coverage-badge]][coverage-url] [![Socket Status][socket-badge]][socket-url] [![NPM Monthly Downloads][downloads-badge]][npm-url] [![Dependencies][deps-badge]][deps-url]
 
 [![GitHub Sponsor][sponsor-badge]][sponsor-url]
 
@@ -8,6 +8,8 @@
 [npm-url]: https://npmjs.org/package/%40alessiofrittoli%2Fevent-emitter
 [coverage-badge]: https://coveralls.io/repos/github/alessiofrittoli/event-emitter/badge.svg
 [coverage-url]: https://coveralls.io/github/alessiofrittoli/event-emitter
+[socket-badge]: https://socket.dev/api/badge/npm/package/@alessiofrittoli/event-emitter
+[socket-url]: https://socket.dev/npm/package/@alessiofrittoli/event-emitter/overview
 [downloads-badge]: https://img.shields.io/npm/dm/%40alessiofrittoli%2Fevent-emitter.svg
 [deps-badge]: https://img.shields.io/librariesio/release/npm/%40alessiofrittoli%2Fevent-emitter
 [deps-url]: https://libraries.io/npm/%40alessiofrittoli%2Fevent-emitter
