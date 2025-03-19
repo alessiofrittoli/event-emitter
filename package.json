@@ -1,6 +1,6 @@
 {
 	"name": "@alessiofrittoli/event-emitter",
-	"version": "1.2.0",
+	"version": "1.2.1",
 	"description": "Cross-env TypeScript Event Emitter",
 	"author": {
 		"name": "Alessio Frittoli",
