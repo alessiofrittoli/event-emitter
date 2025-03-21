@@ -923,12 +923,7 @@ pnpm test:watch
 pnpm test:ci
 ```
 
-You can eventually run specific suits like so:
-
-```bash
-pnpm test:jest
-pnpm test:event-emitter
-```
+- See [`package.json`](./package.json) file scripts for more info.
 
 Run tests with coverage.
 
