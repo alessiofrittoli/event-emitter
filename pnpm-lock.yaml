@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       '@alessiofrittoli/node-scripts':
-        specifier: ^2.4.0
-        version: 2.4.0
+        specifier: ^2.5.0
+        version: 2.5.0
       '@eslint/js':
         specifier: ^9.25.1
         version: 9.25.1
@@ -59,8 +59,8 @@ importers:
 
 packages:
 
-  '@alessiofrittoli/node-scripts@2.4.0':
-    resolution: {integrity: sha512-/RwGb1kv+NH466aGbJ3jdnqFq5+OOz6bHnJIeAKijEZoaTbm1uXxsHuTAbvhy4xHEZlOKOGk/DkflDG78qCmFA==}
+  '@alessiofrittoli/node-scripts@2.5.0':
+    resolution: {integrity: sha512-K6o0ZJgWb8HAbiBU7ajdlNY8UsrAlcLHO2WAx9pPoxjLKC/QR/PnNE+zLgc+z1q4TefS2UsS1VsUAUjQI/Ro4g==}
 
   '@ampproject/remapping@2.3.0':
     resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
@@ -2268,7 +2268,7 @@ packages:
 
 snapshots:
 
-  '@alessiofrittoli/node-scripts@2.4.0': {}
+  '@alessiofrittoli/node-scripts@2.5.0': {}
 
   '@ampproject/remapping@2.3.0':
     dependencies:
