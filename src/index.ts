@@ -79,7 +79,7 @@ export type Listener<
  *
  * @property {Listener<T, K>} listener The actual listener function that will be invoked.
  */
-interface OnceListenerWrapper<
+export interface OnceListenerWrapper<
 	T extends EventsMap<T>,
 	K extends keyof T = keyof T
 >
