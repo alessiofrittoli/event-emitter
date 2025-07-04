@@ -3,7 +3,7 @@
 /**
  * Options for configuring the EventEmitter.
  */
-interface EventEmitterOptions
+export interface EventEmitterOptions
 {
 	/**
 	 * Indicates whether the EventEmitter should capture and handle promise rejections.
@@ -20,7 +20,7 @@ interface EventEmitterOptions
  * A tuple type that represents a rest parameter of any type.
  * This type can be used to define a function parameter that accepts any number of arguments of any type.
  */
-type AnyRest = [ ...args: any[] ]
+export type AnyRest = [ ...args: any[] ]
 
 
 /**
@@ -33,7 +33,7 @@ type AnyRest = [ ...args: any[] ]
  * Otherwise, if `K` is a key in `T`, it resolves to the type of the event arguments for that key.
  * If `K` is not a key in `T`, it resolves to `never`.
  */
-type Args<K, T> = T extends DefaultEventMap ? AnyRest : (
+export type Args<K, T> = T extends DefaultEventMap ? AnyRest : (
 	K extends keyof T ? T[ K ] : never
 )
 
@@ -41,7 +41,7 @@ type Args<K, T> = T extends DefaultEventMap ? AnyRest : (
 /**
  * Represents a default event map where each event name (key) is associated with a tuple containing a single element of type `never`.
  */
-type DefaultEventMap = Record<string, [ never ]>
+export type DefaultEventMap = Record<string, [ never ]>
 
 
 /**
@@ -51,7 +51,7 @@ type DefaultEventMap = Record<string, [ never ]>
  * Each key in the map represents an event name, and the value is an array of 
  * argument types that the event handler will receive when the event is emitted.
  */
-type EventsMap<T> = Record<keyof T, any[]> | DefaultEventMap
+export type EventsMap<T> = Record<keyof T, any[]> | DefaultEventMap
 
 
 /**
