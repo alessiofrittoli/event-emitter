@@ -43,7 +43,7 @@
 		"build:prod": "NODE_ENV=production tsup",
 		"build": "pnpm lint && pnpm test:ci && pnpm build:prod",
 		"lint": "eslint",
-		"release": "node scripts/publish.js --verbose --npm",
+		"release": "node scripts/release.js --verbose --npm",
 		"//2a": "*********************************************************************",
 		"//2b": "***************************** UNIT TESTS ****************************",
 		"//2c": "*********************************************************************",
@@ -59,21 +59,21 @@
 		"test:coverage:serve": "concurrently --prefix none --kill-others \"pnpm test:coverage\" \"pnpm test:serve-coverage\""
 	},
 	"devDependencies": {
-		"@alessiofrittoli/node-scripts": "^2.6.0",
-		"@eslint/js": "^9.30.1",
-		"@jest/globals": "^30.0.4",
+		"@alessiofrittoli/node-scripts": "^3.2.0",
+		"@eslint/js": "^9.39.1",
+		"@jest/globals": "^30.2.0",
 		"@types/jest": "^30.0.0",
-		"@types/node": "^24.0.10",
-		"concurrently": "^9.2.0",
-		"dotenv": "^17.0.1",
-		"eslint": "^9.30.1",
-		"globals": "^16.3.0",
+		"@types/node": "^24.10.1",
+		"concurrently": "^9.2.1",
+		"dotenv": "^17.2.3",
+		"eslint": "^9.39.1",
+		"globals": "^16.5.0",
 		"http-server": "^14.1.1",
-		"jest": "^30.0.4",
-		"ts-jest": "^29.4.0",
+		"jest": "^30.2.0",
+		"ts-jest": "^29.4.6",
 		"ts-node": "^10.9.2",
-		"tsup": "^8.5.0",
-		"typescript": "^5.8.3",
-		"typescript-eslint": "^8.35.1"
+		"tsup": "^8.5.1",
+		"typescript": "^5.9.3",
+		"typescript-eslint": "^8.48.1"
 	}
 }
