@@ -13,7 +13,6 @@
 [downloads-badge]: https://img.shields.io/npm/dm/%40alessiofrittoli%2Fevent-emitter.svg
 [deps-badge]: https://img.shields.io/librariesio/release/npm/%40alessiofrittoli%2Fevent-emitter
 [deps-url]: https://libraries.io/npm/%40alessiofrittoli%2Fevent-emitter
-
 [sponsor-badge]: https://img.shields.io/static/v1?label=Fund%20this%20package&message=%E2%9D%A4&logo=GitHub&color=%23DB61A2
 [sponsor-url]: https://github.com/sponsors/alessiofrittoli
 
@@ -34,7 +33,7 @@ It allows you to register event listeners, emit events, and manage the listeners
   - [Types](#types)
   - [Examples](#examples)
 - [Development](#development)
-  - [Install depenendencies](#install-depenendencies)
+  - [Install dependencies](#install-dependencies)
   - [Build the source code](#build-the-source-code)
   - [ESLint](#eslint)
   - [Jest](#jest)
@@ -73,10 +72,10 @@ new EventEmitter<T>( options?: EventEmitterOptions )
 <details>
 <summary>Parameters</summary>
 
-| Parameter | Type | Default | Description |
-|-----------|------|---------|-------------|
-| `options` | `EventEmitterOptions` | - | Optional configuration object for the emitter instance. |
-| `options.captureRejections` | `boolean` | `false` | If set to `true`, captures and handles promise rejections in listeners. |
+| Parameter                   | Type                  | Default | Description                                                             |
+| --------------------------- | --------------------- | ------- | ----------------------------------------------------------------------- |
+| `options`                   | `EventEmitterOptions` | -       | Optional configuration object for the emitter instance.                 |
+| `options.captureRejections` | `boolean`             | `false` | If set to `true`, captures and handles promise rejections in listeners. |
 
 </details>
 
@@ -92,7 +91,7 @@ Emits an event to all registered listeners.
 <summary>Parameters</summary>
 
 | Parameter | Type         | Description                            |
-|-----------|--------------|----------------------------------------|
+| --------- | ------------ | -------------------------------------- |
 | `event`   | `K`          | The event name to emit.                |
 | `args`    | `Args<K, T>` | The arguments passed to the listeners. |
 
@@ -108,7 +107,7 @@ Adds a listener for the specified event.
 <summary>Parameters</summary>
 
 | Parameter  | Type             | Description                                             |
-|------------|------------------|---------------------------------------------------------|
+| ---------- | ---------------- | ------------------------------------------------------- |
 | `event`    | `K`              | The event name to listen for.                           |
 | `listener` | `Listener<T, K>` | The listener function called when the event is emitted. |
 
@@ -141,7 +140,7 @@ Adds a listener to the beginning of the listener array for the specified event.
 <summary>Parameters</summary>
 
 | Parameter  | Type             | Description                                             |
-|------------|------------------|---------------------------------------------------------|
+| ---------- | ---------------- | ------------------------------------------------------- |
 | `event`    | `K`              | The event name to listen for.                           |
 | `listener` | `Listener<T, K>` | The listener function called when the event is emitted. |
 
@@ -174,7 +173,7 @@ Adds a one-time listener for the specified event. Even if the event is emitted m
 <summary>Parameters</summary>
 
 | Parameter  | Type             | Description                                             |
-|------------|------------------|---------------------------------------------------------|
+| ---------- | ---------------- | ------------------------------------------------------- |
 | `event`    | `K`              | The event name to listen for.                           |
 | `listener` | `Listener<T, K>` | The listener function called when the event is emitted. |
 
@@ -201,7 +200,7 @@ Adds a one-time listener to the beginning of the listener array for the specifie
 <summary>Parameters</summary>
 
 | Parameter  | Type             | Description                                             |
-|------------|------------------|---------------------------------------------------------|
+| ---------- | ---------------- | ------------------------------------------------------- |
 | `event`    | `K`              | The event name to listen for.                           |
 | `listener` | `Listener<T, K>` | The listener function called when the event is emitted. |
 
@@ -234,7 +233,7 @@ Removes a listener for the specified event.
 <summary>Parameters</summary>
 
 | Parameter  | Type             | Description                                             |
-|------------|------------------|---------------------------------------------------------|
+| ---------- | ---------------- | ------------------------------------------------------- |
 | `event`    | `K`              | The event name to remove the listener from.             |
 | `listener` | `Listener<T, K>` | The listener function to remove from the given `event`. |
 
@@ -266,10 +265,10 @@ Removes all listeners for a specified event or all events.
 <details>
 <summary>Parameters</summary>
 
-| Parameter  | Type             | Description                                             |
-|------------|------------------|---------------------------------------------------------|
-| `event`    | `K`              | (Optional) The event name to remove listeners from.     |
-| `listener` | `Listener<T, K>` | (Optional) The listener function to remove.             |
+| Parameter  | Type             | Description                                         |
+| ---------- | ---------------- | --------------------------------------------------- |
+| `event`    | `K`              | (Optional) The event name to remove listeners from. |
+| `listener` | `Listener<T, K>` | (Optional) The listener function to remove.         |
 
 </details>
 
@@ -313,7 +312,7 @@ This is not a hard limit. The `EventEmitter` instance will allow more listeners 
 <summary>Parameters</summary>
 
 | Parameter | Type     | Description                      |
-|-----------|----------|----------------------------------|
+| --------- | -------- | -------------------------------- |
 | `n`       | `number` | The maximum number of listeners. |
 
 </details>
@@ -339,7 +338,7 @@ Gets the number of listeners for the specified event.
 <summary>Parameters</summary>
 
 | Parameter  | Type             | Description                                              |
-|------------|------------------|----------------------------------------------------------|
+| ---------- | ---------------- | -------------------------------------------------------- |
 | `event`    | `K`              | The event name to check the listeners for.               |
 | `listener` | `Listener<T, K>` | (Optional) The specific listener to count (if provided). |
 
@@ -366,7 +365,7 @@ Returns a list of listeners for the specified event.
 <summary>Parameters</summary>
 
 | Parameter | Type | Description                          |
-|-----------|------|--------------------------------------|
+| --------- | ---- | ------------------------------------ |
 | `event`   | `K`  | The event name to get listeners for. |
 
 </details>
@@ -392,7 +391,7 @@ Returns a copy of the array of listeners for the specified event, including any 
 <summary>Parameters</summary>
 
 | Parameter | Type | Description                          |
-|-----------|------|--------------------------------------|
+| --------- | ---- | ------------------------------------ |
 | `event`   | `K`  | The event name to get listeners for. |
 
 </details>
@@ -436,8 +435,8 @@ Options for configuring the `EventEmitter`.
 <details>
 <summary>Properties</summary>
 
-| Proeprty            | Type      | Description |
-|---------------------|-----------|-------------|
+| Proeprty            | Type      | Description                                                           |
+| ------------------- | --------- | --------------------------------------------------------------------- |
 | `captureRejections` | `boolean` | If set to true, captures and handles promise rejections in listeners. |
 
 </details>
@@ -451,8 +450,8 @@ Defines the type of a listener function.
 <details>
 <summary>Properties</summary>
 
-| Proeprty | Type         | Description |
-|----------|--------------|-------------|
+| Proeprty | Type         | Description                                                      |
+| -------- | ------------ | ---------------------------------------------------------------- |
 | `args`   | `Args<K, T>` | Arguments passed to the listener corresponding to the event key. |
 
 </details>
@@ -466,10 +465,10 @@ A wrapper for listeners that should be invoked only once.
 <details>
 <summary>Properties</summary>
 
-| Proeprty   | Type             | Description |
-|------------|------------------|-------------|
+| Proeprty   | Type             | Description                                                      |
+| ---------- | ---------------- | ---------------------------------------------------------------- |
 | `args`     | `Args<K, T>`     | Arguments passed to the listener corresponding to the event key. |
-| `listener` | `Listener<T, K>` | The actual listener function to be invoked. |
+| `listener` | `Listener<T, K>` | The actual listener function to be invoked.                      |
 
 </details>
 
@@ -490,20 +489,19 @@ A utility type that resolves to a specific type based on the provided keys and e
 <summary>Details</summary>
 
 ```ts
-import type { Listener } from '@alessiofrittoli/event-emitter'
+import type { Listener } from "@alessiofrittoli/event-emitter";
 
 // Define an event map for your EventEmitter
-interface MyEvents
-{
-  greet     : [ name: string ]  // The 'greet' event takes a string argument
-  farewell  : [ name: Error ]   // The 'farewell' event also takes a string argument
-  error     : [ error: Error ]  // The 'error' event takes an Error argument
+interface MyEvents {
+  greet: [name: string]; // The 'greet' event takes a string argument
+  farewell: [name: Error]; // The 'farewell' event also takes a string argument
+  error: [error: Error]; // The 'error' event takes an Error argument
 }
 
 // Optionally define listeners types
-type OnGreetEventListener     = Listener<MyEvents, 'greet'>
-type OnFarewellEventListener  = Listener<MyEvents, 'farewell'>
-type OnErrorEventListener     = Listener<MyEvents, 'error'>
+type OnGreetEventListener = Listener<MyEvents, "greet">;
+type OnFarewellEventListener = Listener<MyEvents, "farewell">;
+type OnErrorEventListener = Listener<MyEvents, "error">;
 ```
 
 </details>
@@ -516,19 +514,17 @@ type OnErrorEventListener     = Listener<MyEvents, 'error'>
 <summary>Declaring listeners</summary>
 
 ```ts
-const greetListener: OnGreetEventListener = name => {
-  console.log( `Hello, ${ name }!` )
-}
+const greetListener: OnGreetEventListener = (name) => {
+  console.log(`Hello, ${name}!`);
+};
 
+const farewellListener: OnFarewellEventListener = (name) => {
+  console.log(`Goodbye, ${name}!`);
+};
 
-const farewellListener: OnFarewellEventListener = name => {
-  console.log( `Goodbye, ${ name }!` )
-}
-
-
-const errorListener: OnErrorEventListener = error => {
-  console.error( 'Something went wrong.', error.message )
-}
+const errorListener: OnErrorEventListener = (error) => {
+  console.error("Something went wrong.", error.message);
+};
 ```
 
 </details>
@@ -539,19 +535,19 @@ const errorListener: OnErrorEventListener = error => {
 <summary>Registering listeners and emitting events</summary>
 
 ```ts
-import { EventEmitter } from '@alessiofrittoli/event-emitter'
+import { EventEmitter } from "@alessiofrittoli/event-emitter";
 
-const emitter = new EventEmitter<MyEvents>()
+const emitter = new EventEmitter<MyEvents>();
 
 // Attach listeners
-emitter.on( 'greet', greetListener )
-emitter.on( 'farewell', farewellListener )
-emitter.on( 'error', errorListener )
+emitter.on("greet", greetListener);
+emitter.on("farewell", farewellListener);
+emitter.on("error", errorListener);
 
 // Emit events
-emitter.emit( 'greet', 'Foo' )
-emitter.emit( 'farewell', 'Bar' )
-emitter.emit( 'error', new Error( 'An error occured.' ) )
+emitter.emit("greet", "Foo");
+emitter.emit("farewell", "Bar");
+emitter.emit("error", new Error("An error occured."));
 ```
 
 </details>
@@ -565,19 +561,19 @@ emitter.emit( 'error', new Error( 'An error occured.' ) )
 <summary>Details</summary>
 
 ```ts
-const emitter = new EventEmitter<MyEvents>()
+const emitter = new EventEmitter<MyEvents>();
 
 // Define a listener for the 'greet' event that should only be called once
-const greetOnceListener: OnGreetEventListener = name => {
-  console.log( `Once Hello, ${ name }!` )
-}
+const greetOnceListener: OnGreetEventListener = (name) => {
+  console.log(`Once Hello, ${name}!`);
+};
 
-emitter.once( 'greet', greetOnceListener )
+emitter.once("greet", greetOnceListener);
 
 // Emit the event
-emitter.emit( 'greet', 'Foo' )
+emitter.emit("greet", "Foo");
 // `greetOnceListener` won't be called anymore, as the listener was removed after the first call.
-emitter.emit( 'greet', 'Bob' )
+emitter.emit("greet", "Bob");
 ```
 
 </details>
@@ -591,27 +587,26 @@ emitter.emit( 'greet', 'Bob' )
 <summary>Details</summary>
 
 ```ts
-const emitter = new EventEmitter<MyEvents>( { captureRejections: true } )
+const emitter = new EventEmitter<MyEvents>({ captureRejections: true });
 
-const greetListener: OnGreetEventListener = name => {
-  if ( name === 'He-Who-Must-Not-Be-Named' ) {
-    throw new Error( 'nooose!' )
+const greetListener: OnGreetEventListener = (name) => {
+  if (name === "He-Who-Must-Not-Be-Named") {
+    throw new Error("nooose!");
   }
-  console.log( `Howdy, ${ name }!` )
-}
+  console.log(`Howdy, ${name}!`);
+};
 
-const errorListener: OnErrorEventListener = error => {
-  console.error( 'Caught your', error.message )
-}
-
+const errorListener: OnErrorEventListener = (error) => {
+  console.error("Caught your", error.message);
+};
 
 // Add listeners
-emitter.on( 'greet', greetListener )
-emitter.on( 'error', errorListener )
+emitter.on("greet", greetListener);
+emitter.on("error", errorListener);
 
 // Emit events
-emitter.emit( 'greet', 'Foo' )
-emitter.emit( 'greet', 'He-Who-Must-Not-Be-Named' )
+emitter.emit("greet", "Foo");
+emitter.emit("greet", "He-Who-Must-Not-Be-Named");
 ```
 
 </details>
@@ -625,33 +620,27 @@ emitter.emit( 'greet', 'He-Who-Must-Not-Be-Named' )
 <summary>Details</summary>
 
 ```ts
-const emitter = (
-  new EventEmitter<MyEvents>()
-    .setMaxListeners( 1 )
-)
+const emitter = new EventEmitter<MyEvents>().setMaxListeners(1);
 
-const greetListener1: OnGreetEventListener = name => {
-  console.log( `Hello, ${ name }!` )
-}
+const greetListener1: OnGreetEventListener = (name) => {
+  console.log(`Hello, ${name}!`);
+};
 
+const greetListener2: OnGreetEventListener = (name) => {
+  console.log(`Hi, ${name}!`);
+};
 
-const greetListener2: OnGreetEventListener = name => {
-  console.log( `Hi, ${ name }!` )
-}
-
-
-const greetListener3: OnGreetEventListener = name => {
-  console.log( `Howdy, ${ name }!` )
-}
-
+const greetListener3: OnGreetEventListener = (name) => {
+  console.log(`Howdy, ${name}!`);
+};
 
 // Attach listeners
-emitter.on( 'greet', greetListener1 )
-emitter.on( 'greet', greetListener2 ) // This will trigger a warning but it will get executed anyway.
-emitter.on( 'greet', greetListener3 ) // This won't trigger a warning. Warnings are emitted once.
+emitter.on("greet", greetListener1);
+emitter.on("greet", greetListener2); // This will trigger a warning but it will get executed anyway.
+emitter.on("greet", greetListener3); // This won't trigger a warning. Warnings are emitted once.
 
-emitter.emit( 'greet', 'Foo' )
-// Output: 
+emitter.emit("greet", "Foo");
+// Output:
 // Hello, Foo!
 // Hi, Foo!
 // Howdy, Foo!
@@ -668,22 +657,22 @@ emitter.emit( 'greet', 'Foo' )
 <summary>Details</summary>
 
 ```ts
-const emitter = new EventEmitter<MyEvents>()
+const emitter = new EventEmitter<MyEvents>();
 
 // Attach listeners
-emitter.on( 'greet', name => {
-  console.log( `A: Hello! Better late than never ${ name }.` )
-} )
-emitter.prepend( 'greet', name => {
-  console.log( `B: Hello, ${ name }!` )
-} )
-emitter.prependOnce( 'greet', name => {
-  console.log( `C: Once Hello, ${ name }! I won't say hello to you, Bar.` )
-} )
+emitter.on("greet", (name) => {
+  console.log(`A: Hello! Better late than never ${name}.`);
+});
+emitter.prepend("greet", (name) => {
+  console.log(`B: Hello, ${name}!`);
+});
+emitter.prependOnce("greet", (name) => {
+  console.log(`C: Once Hello, ${name}! I won't say hello to you, Bar.`);
+});
 
 // Emit events
-emitter.emit( 'greet', 'Foo' )
-emitter.emit( 'greet', 'Bar' )
+emitter.emit("greet", "Foo");
+emitter.emit("greet", "Bar");
 // Outputs:
 // C: Once Hello, Foo! I won't say hello to you, Bar.
 // B: Hello, Foo!
@@ -702,16 +691,14 @@ emitter.emit( 'greet', 'Bar' )
 <summary>Get listeners count for a specific event</summary>
 
 ```ts
-const emitter = (
-  new EventEmitter<MyEvents>()
-    .on( 'greet', () => {} )
-    .on( 'greet', () => {} )
-    .on( 'farewell', () => {} )
-)
+const emitter = new EventEmitter<MyEvents>()
+  .on("greet", () => {})
+  .on("greet", () => {})
+  .on("farewell", () => {});
 
-console.log( emitter.listenerCount( 'greet' ) )     // Outputs: `2`
-console.log( emitter.listenerCount( 'farewell' ) )  // Outputs: `1`
-console.log( emitter.listenerCount( 'error' ) )     // Outputs: `0`
+console.log(emitter.listenerCount("greet")); // Outputs: `2`
+console.log(emitter.listenerCount("farewell")); // Outputs: `1`
+console.log(emitter.listenerCount("error")); // Outputs: `0`
 ```
 
 </details>
@@ -722,18 +709,16 @@ console.log( emitter.listenerCount( 'error' ) )     // Outputs: `0`
 <summary>Get listeners count for a specific event and listener</summary>
 
 ```ts
-const callback1 = () => {}
-const callback2 = () => {}
+const callback1 = () => {};
+const callback2 = () => {};
 
-const emitter = (
-  new EventEmitter<MyEvents>()
-    .on( 'greet', callback1 )
-    .on( 'greet', callback1 )
-    .on( 'greet', callback2 )
-)
+const emitter = new EventEmitter<MyEvents>()
+  .on("greet", callback1)
+  .on("greet", callback1)
+  .on("greet", callback2);
 
-console.log( emitter.listenerCount( 'greet', callback1 ) ) // Outputs: `2`
-console.log( emitter.listenerCount( 'greet', callback2 ) ) // Outputs: `1`
+console.log(emitter.listenerCount("greet", callback1)); // Outputs: `2`
+console.log(emitter.listenerCount("greet", callback2)); // Outputs: `1`
 ```
 
 </details>
@@ -748,23 +733,21 @@ console.log( emitter.listenerCount( 'greet', callback2 ) ) // Outputs: `1`
 We register `callback2` with `EventEmitter.once()` to verify that we correctly get the original `callback2` instead of the `onceWrapper` function in the returning array.
 
 ```ts
-const callback1 = () => {}
-const callback2 = () => {}
+const callback1 = () => {};
+const callback2 = () => {};
 
-const emitter = (
-  new EventEmitter<MyEvents>()
-    .on( 'greet', callback1 )
-    .once( 'greet', callback2 )
-    .on( 'farewell', callback1 )
-)
-const functions = emitter.listeners( 'greet' ) // Listener<MyEvents, 'greet'>[]
+const emitter = new EventEmitter<MyEvents>()
+  .on("greet", callback1)
+  .once("greet", callback2)
+  .on("farewell", callback1);
+const functions = emitter.listeners("greet"); // Listener<MyEvents, 'greet'>[]
 
-console.log( functions )
+console.log(functions);
 // Outputs: `[ [Function: callback1], [Function: callback2] ]`
 
-functions.map( listener => {
-  listener() // manually execute the listener.
-} )
+functions.map((listener) => {
+  listener(); // manually execute the listener.
+});
 ```
 
 </details>
@@ -777,30 +760,28 @@ functions.map( listener => {
 Again we register `callback2` with `EventEmitter.once()` to verify that we correctly get the `onceWrapper` function instead of the original `callback2` listener in the returning array.
 
 ```ts
-const callback1 = () => {}
-const callback2 = () => {}
+const callback1 = () => {};
+const callback2 = () => {};
 
-const emitter = (
-  new EventEmitter<MyEvents>()
-    .on( 'greet', callback1 )
-    .once( 'greet', callback2 )
-    .on( 'farewell', callback1 )
-)
+const emitter = new EventEmitter<MyEvents>()
+  .on("greet", callback1)
+  .once("greet", callback2)
+  .on("farewell", callback1);
 
-const functions = emitter.rawListeners( 'greet' ) // ( Listener<MyEvents, 'greet'> | OnceListenerWrapper<MyEvents, 'greet'> )[]
+const functions = emitter.rawListeners("greet"); // ( Listener<MyEvents, 'greet'> | OnceListenerWrapper<MyEvents, 'greet'> )[]
 
-console.log( functions )
+console.log(functions);
 // Outputs: `[ [Function: callback1], [Function: onceWrapper] { listener: [Function: callback2] } ]`
 
-functions.map( callback => {
+functions.map((callback) => {
   /** Manually execute the listener. If this is a `onceWrapper` function, it will remove the listener from the listeners array and then execute the original listener function. */
-  callback()
+  callback();
 
   /** Or execute the original listener without removing it from the listeners array. */
-  if ( 'listener' in callback ) {
-    callback.listener()
+  if ("listener" in callback) {
+    callback.listener();
   }
-} )
+});
 ```
 
 </details>
@@ -813,22 +794,20 @@ functions.map( callback => {
 <summary>Remove all attached listeners to every registered event</summary>
 
 ```ts
-const emitter = (
-  new EventEmitter<MyEvents>()
-    .on( 'greet', () => {} )
-    .once( 'greet', () => {} )
-    .on( 'farewell', () => {} )
-)
+const emitter = new EventEmitter<MyEvents>()
+  .on("greet", () => {})
+  .once("greet", () => {})
+  .on("farewell", () => {});
 
-console.log( emitter.listenerCount( 'greet' ) )     // Outputs: `2`
-console.log( emitter.listenerCount( 'farewell' ) )  // Outputs: `1`
-console.log( emitter.listenerCount( 'error' ) )     // Outputs: `0`
+console.log(emitter.listenerCount("greet")); // Outputs: `2`
+console.log(emitter.listenerCount("farewell")); // Outputs: `1`
+console.log(emitter.listenerCount("error")); // Outputs: `0`
 
-emitter.removeAllListeners()
+emitter.removeAllListeners();
 
-console.log( emitter.listenerCount( 'greet' ) )     // Outputs: `0`
-console.log( emitter.listenerCount( 'farewell' ) )  // Outputs: `0`
-console.log( emitter.listenerCount( 'error' ) )     // Outputs: `0`
+console.log(emitter.listenerCount("greet")); // Outputs: `0`
+console.log(emitter.listenerCount("farewell")); // Outputs: `0`
+console.log(emitter.listenerCount("error")); // Outputs: `0`
 ```
 
 </details>
@@ -839,17 +818,15 @@ console.log( emitter.listenerCount( 'error' ) )     // Outputs: `0`
 <summary>Remove all attached listeners to a specific event</summary>
 
 ```ts
-const emitter = (
-  new EventEmitter<MyEvents>()
-    .on( 'greet', () => {} )
-    .once( 'greet', () => {} )
-    .on( 'farewell', () => {} )
-    .removeAllListeners( 'greet' )
-)
+const emitter = new EventEmitter<MyEvents>()
+  .on("greet", () => {})
+  .once("greet", () => {})
+  .on("farewell", () => {})
+  .removeAllListeners("greet");
 
-console.log( emitter.listenerCount( 'greet' ) )     // Outputs: `0`
-console.log( emitter.listenerCount( 'farewell' ) )  // Outputs: `1`
-console.log( emitter.listenerCount( 'error' ) )     // Outputs: `0`
+console.log(emitter.listenerCount("greet")); // Outputs: `0`
+console.log(emitter.listenerCount("farewell")); // Outputs: `1`
+console.log(emitter.listenerCount("error")); // Outputs: `0`
 ```
 
 </details>
@@ -860,21 +837,19 @@ console.log( emitter.listenerCount( 'error' ) )     // Outputs: `0`
 <summary>Remove specifc listeners attached to a specific event</summary>
 
 ```ts
-const callback1 = () => {}
-const callback2 = () => {}
+const callback1 = () => {};
+const callback2 = () => {};
 
-const emitter = (
-  new EventEmitter<MyEvents>()
-    .on( 'greet', callback1 )
-    .once( 'greet', callback1 )
-    .once( 'greet', callback2 )
-    .on( 'farewell', callback1 )
-    .removeAllListeners( 'greet', callback1 )
-)
+const emitter = new EventEmitter<MyEvents>()
+  .on("greet", callback1)
+  .once("greet", callback1)
+  .once("greet", callback2)
+  .on("farewell", callback1)
+  .removeAllListeners("greet", callback1);
 
-console.log( emitter.listenerCount( 'greet' ) )     // Outputs: `1`
-console.log( emitter.listenerCount( 'farewell' ) )  // Outputs: `1`
-console.log( emitter.listenerCount( 'error' ) )     // Outputs: `0`
+console.log(emitter.listenerCount("greet")); // Outputs: `1`
+console.log(emitter.listenerCount("farewell")); // Outputs: `1`
+console.log(emitter.listenerCount("error")); // Outputs: `0`
 ```
 
 </details>
@@ -883,7 +858,7 @@ console.log( emitter.listenerCount( 'error' ) )     // Outputs: `0`
 
 ### Development
 
-#### Install depenendencies
+#### Install dependencies
 
 ```bash
 npm install
@@ -905,7 +880,7 @@ pnpm build
 
 #### [ESLint](https://www.npmjs.com/package/eslint)
 
-warnings / errors check.
+Run checks for warnings and errors.
 
 ```bash
 pnpm lint
@@ -932,7 +907,7 @@ An HTTP server is then started to serve coverage files from `./coverage` folder.
 ⚠️ You may see a blank page the first time you run this command. Simply refresh the browser to see the updates.
 
 ```bash
-test:coverage:serve
+pnpm test:coverage:serve
 ```
 
 ---
