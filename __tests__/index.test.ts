@@ -6,6 +6,7 @@ interface MyEvents {
 	event2: [never]
 	erroredEvent: [message: string]
 	error: [error: Error]
+	'custom-error': [error: Error]
 }
 
 type OnEventListener = Listener<MyEvents, 'event'>
@@ -39,6 +40,8 @@ describe('EventEmitter', () => {
 		const mockErrorCallback = vi.fn()
 
 		errorEmitter.on('error', mockErrorCallback)
+
+		// note that we using `async` here!
 		errorEmitter.on('erroredEvent', async () => {
 			throw new Error('Test error')
 		})
@@ -47,11 +50,49 @@ describe('EventEmitter', () => {
 		/**
 		 * await for testing purposes.
 		 *
-		 * if we skip this step, the Vi assert will run before the Error is thrown, resulting in a failing test.
+		 * if we skip this step, the Vitest assert will run before the Error is thrown, resulting in a failing test.
 		 */
 		await new Promise<void>(resolve => resolve())
 
 		expect(mockErrorCallback).toHaveBeenCalledWith(expect.any(Error))
+	})
+
+	it('handles errors with captureRejections and emits an event using the given `capturedRejectionEvent`', async () => {
+		const errorEmitter = new EventEmitter<MyEvents>({
+			captureRejections: true,
+			capturedRejectionEvent: 'custom-error',
+		})
+		const mockErrorCallback = vi.fn()
+
+		errorEmitter.on('custom-error', mockErrorCallback)
+
+		errorEmitter.on('erroredEvent', () => {
+			throw new Error('Test error')
+		})
+
+		errorEmitter.emit('erroredEvent', 'Hello, World!')
+
+		expect(mockErrorCallback).toHaveBeenCalledWith(expect.any(Error))
+	})
+
+	it('handles errors with captureRejections and emits a transformed error with given `transformError`', async () => {
+		const errorEmitter = new EventEmitter<MyEvents>({
+			captureRejections: true,
+			transformError(): string {
+				return 'transformed-error'
+			},
+		})
+		const mockErrorCallback = vi.fn()
+
+		errorEmitter.on('error', mockErrorCallback)
+
+		errorEmitter.on('erroredEvent', () => {
+			throw new Error('Test error')
+		})
+
+		errorEmitter.emit('erroredEvent', 'Hello, World!')
+
+		expect(mockErrorCallback).toHaveBeenCalledWith('transformed-error')
 	})
 
 	it("doesn't emit `error` event with `captureRejections` when an error is thrown in an `error` event listener avoiding infinite loop", () => {
@@ -63,6 +104,7 @@ describe('EventEmitter', () => {
 			errorEmitter.on('erroredEvent', () => {
 				throw new Error('Test error')
 			})
+
 			mockErrorCallback = vi.fn(error => {
 				throw new Error('Re-thrown error', { cause: error })
 			})
@@ -82,13 +124,26 @@ describe('EventEmitter', () => {
 
 	it('re-throws errors when captureRejections is `false` or not set', () => {
 		const errorEmitter = new EventEmitter<MyEvents>()
-		const mockErrorCallback = vi.fn()
-		errorEmitter.on('error', mockErrorCallback)
+
 		errorEmitter.on('erroredEvent', () => {
 			throw new Error('Test error')
 		})
 
 		expect(() => errorEmitter.emit('erroredEvent', 'Hello, World!')).toThrow('Test error')
+	})
+
+	it('re-throws errors when captureRejections is `false` with given `transformError`', async () => {
+		const errorEmitter = new EventEmitter<MyEvents>({
+			transformError(): string {
+				return 'transformed-error'
+			},
+		})
+
+		errorEmitter.on('erroredEvent', () => {
+			throw new Error('Test error')
+		})
+
+		expect(() => errorEmitter.emit('erroredEvent', 'Hello, World!')).toThrow('transformed-error')
 	})
 
 	const actWarningEmit = (): {

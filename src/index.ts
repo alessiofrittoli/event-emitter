@@ -6,6 +6,7 @@ import type {
 	OnceListenerWrapper,
 	EventEmitterOptions,
 	Listener,
+	TransformErrorHandler,
 } from '@/types'
 
 export type * from '@/types'
@@ -127,15 +128,28 @@ export class EventEmitter<T extends EventsMap<T> = DefaultEventMap> {
 	private capturedRejectionEvent: string
 
 	/**
+	 * A custom function that transform caught `Error` to something else.
+	 *
+	 * @param error The caught `Error`.
+	 * @returns The transformed `error`.
+	 */
+	private transformError: TransformErrorHandler
+
+	/**
 	 * Creates a new instance of EventEmitter.
 	 *
 	 * @param options An object defining custom configurations. See {@link EventEmitterOptions} for more info.
 	 */
 	public constructor(options: EventEmitterOptions = {}) {
-		const { captureRejections = false, capturedRejectionEvent = 'error' } = options
+		const {
+			captureRejections = false,
+			capturedRejectionEvent = 'error',
+			transformError = (error): unknown => error,
+		} = options
 
 		this.captureRejections = captureRejections
 		this.capturedRejectionEvent = capturedRejectionEvent
+		this.transformError = transformError
 
 		if (this.maxListeners < 0) {
 			throw new RangeError(
@@ -199,14 +213,20 @@ export class EventEmitter<T extends EventsMap<T> = DefaultEventMap> {
 					event !== this.capturedRejectionEvent
 				) {
 					result.catch(error =>
-						this.emit(this.capturedRejectionEvent as K, ...([error] as Args<K, T>)),
+						this.emit(
+							this.capturedRejectionEvent as K,
+							...([this.transformError(error)] as Args<K, T>),
+						),
 					)
 				}
 			} catch (error) {
 				if (this.captureRejections && event !== this.capturedRejectionEvent) {
-					this.emit(this.capturedRejectionEvent as K, ...([error] as Args<K, T>))
+					this.emit(
+						this.capturedRejectionEvent as K,
+						...([this.transformError(error)] as Args<K, T>),
+					)
 				} else {
-					throw error
+					throw this.transformError(error)
 				}
 			}
 		})

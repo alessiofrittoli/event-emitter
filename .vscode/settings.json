@@ -7,7 +7,7 @@
 		"statusBar.border": "#4DCDC0",
 		"statusBar.foreground": "#F0F0F0",
 		"activityBar.activeBorder": "#4DCDC0",
-		"activityBarBadge.foreground": "#F0F0F0",
+		"activityBarBadge.foreground": "#212121",
 		"activityBarBadge.background": "#4DCDC0"
 	},
 	"editor.defaultFormatter": "esbenp.prettier-vscode",
