@@ -3,7 +3,7 @@ import { EventEmitter, type Listener } from '@/index'
 
 interface MyEvents {
 	event: [message: string]
-	event2: [never]
+	event2: []
 	erroredEvent: [message: string]
 	error: [error: Error]
 	'custom-error': [error: Error]
@@ -20,130 +20,6 @@ describe('EventEmitter', () => {
 
 	afterEach(() => {
 		emitter.removeAllListeners()
-	})
-
-	it('handles errors with captureRejections', () => {
-		const errorEmitter = new EventEmitter<MyEvents>({ captureRejections: true })
-		const mockErrorCallback = vi.fn()
-
-		errorEmitter.on('error', mockErrorCallback)
-		errorEmitter.on('erroredEvent', () => {
-			throw new Error('Test error')
-		})
-		errorEmitter.emit('erroredEvent', 'Hello, World!')
-
-		expect(mockErrorCallback).toHaveBeenCalledWith(expect.any(Error))
-	})
-
-	it('handles errors with captureRejections and async listeners', async () => {
-		const errorEmitter = new EventEmitter<MyEvents>({ captureRejections: true })
-		const mockErrorCallback = vi.fn()
-
-		errorEmitter.on('error', mockErrorCallback)
-
-		// note that we using `async` here!
-		errorEmitter.on('erroredEvent', async () => {
-			throw new Error('Test error')
-		})
-		errorEmitter.emit('erroredEvent', 'Hello, World!')
-
-		/**
-		 * await for testing purposes.
-		 *
-		 * if we skip this step, the Vitest assert will run before the Error is thrown, resulting in a failing test.
-		 */
-		await new Promise<void>(resolve => resolve())
-
-		expect(mockErrorCallback).toHaveBeenCalledWith(expect.any(Error))
-	})
-
-	it('handles errors with captureRejections and emits an event using the given `capturedRejectionEvent`', async () => {
-		const errorEmitter = new EventEmitter<MyEvents>({
-			captureRejections: true,
-			capturedRejectionEvent: 'custom-error',
-		})
-		const mockErrorCallback = vi.fn()
-
-		errorEmitter.on('custom-error', mockErrorCallback)
-
-		errorEmitter.on('erroredEvent', () => {
-			throw new Error('Test error')
-		})
-
-		errorEmitter.emit('erroredEvent', 'Hello, World!')
-
-		expect(mockErrorCallback).toHaveBeenCalledWith(expect.any(Error))
-	})
-
-	it('handles errors with captureRejections and emits a transformed error with given `transformError`', async () => {
-		const errorEmitter = new EventEmitter<MyEvents>({
-			captureRejections: true,
-			transformError(): string {
-				return 'transformed-error'
-			},
-		})
-		const mockErrorCallback = vi.fn()
-
-		errorEmitter.on('error', mockErrorCallback)
-
-		errorEmitter.on('erroredEvent', () => {
-			throw new Error('Test error')
-		})
-
-		errorEmitter.emit('erroredEvent', 'Hello, World!')
-
-		expect(mockErrorCallback).toHaveBeenCalledWith('transformed-error')
-	})
-
-	it("doesn't emit `error` event with `captureRejections` when an error is thrown in an `error` event listener avoiding infinite loop", () => {
-		let mockErrorCallback
-
-		const callback = (): void => {
-			const errorEmitter = new EventEmitter<MyEvents>({ captureRejections: true })
-
-			errorEmitter.on('erroredEvent', () => {
-				throw new Error('Test error')
-			})
-
-			mockErrorCallback = vi.fn(error => {
-				throw new Error('Re-thrown error', { cause: error })
-			})
-
-			errorEmitter.on('error', mockErrorCallback)
-			errorEmitter.emit('erroredEvent', 'Hello, World!')
-		}
-
-		try {
-			callback()
-		} catch (err) {
-			const error = err as Error
-			expect(error).toEqual(new Error('Re-thrown error', { cause: new Error('Test error') }))
-			expect(mockErrorCallback).toHaveBeenCalledTimes(1)
-		}
-	})
-
-	it('re-throws errors when captureRejections is `false` or not set', () => {
-		const errorEmitter = new EventEmitter<MyEvents>()
-
-		errorEmitter.on('erroredEvent', () => {
-			throw new Error('Test error')
-		})
-
-		expect(() => errorEmitter.emit('erroredEvent', 'Hello, World!')).toThrow('Test error')
-	})
-
-	it('re-throws errors when captureRejections is `false` with given `transformError`', async () => {
-		const errorEmitter = new EventEmitter<MyEvents>({
-			transformError(): string {
-				return 'transformed-error'
-			},
-		})
-
-		errorEmitter.on('erroredEvent', () => {
-			throw new Error('Test error')
-		})
-
-		expect(() => errorEmitter.emit('erroredEvent', 'Hello, World!')).toThrow('transformed-error')
 	})
 
 	const actWarningEmit = (): {
@@ -254,6 +130,160 @@ describe('EventEmitter', () => {
 			expect(mockCallback1).toHaveBeenCalledWith('Hello, World!')
 			expect(mockCallback2).toHaveBeenCalledWith('Hello, World!')
 			expect(executionOrder).toEqual(['mockCallback1', 'mockCallback2'])
+		})
+
+		it("doesn't execute listeners if events have been paused", () => {
+			const listener = vi.fn()
+
+			emitter.on('event', listener)
+			emitter.on('event2', listener)
+
+			emitter.pauseEvents()
+
+			emitter.emit('event', 'message')
+			emitter.emit('event2')
+
+			expect(listener).not.toHaveBeenCalled()
+		})
+
+		it("doesn't execute listeners if the given event have been paused", () => {
+			const listener = vi.fn()
+			const listener2 = vi.fn()
+
+			emitter.on('event', listener)
+			emitter.on('event2', listener2)
+
+			emitter.pauseEvents('event')
+
+			emitter.emit('event', 'message')
+			emitter.emit('event2')
+
+			expect(listener).not.toHaveBeenCalled()
+			expect(listener2).toHaveBeenCalledOnce()
+		})
+
+		it('handles errors with captureRejections', () => {
+			const errorEmitter = new EventEmitter<MyEvents>({ captureRejections: true })
+			const mockErrorCallback = vi.fn()
+
+			errorEmitter.on('error', mockErrorCallback)
+			errorEmitter.on('erroredEvent', () => {
+				throw new Error('Test error')
+			})
+			errorEmitter.emit('erroredEvent', 'Hello, World!')
+
+			expect(mockErrorCallback).toHaveBeenCalledWith(expect.any(Error))
+		})
+
+		it('handles errors with captureRejections and async listeners', async () => {
+			const errorEmitter = new EventEmitter<MyEvents>({ captureRejections: true })
+			const mockErrorCallback = vi.fn()
+
+			errorEmitter.on('error', mockErrorCallback)
+
+			// note that we using `async` here!
+			errorEmitter.on('erroredEvent', async () => {
+				throw new Error('Test error')
+			})
+			errorEmitter.emit('erroredEvent', 'Hello, World!')
+
+			/**
+			 * await for testing purposes.
+			 *
+			 * if we skip this step, the Vitest assert will run before the Error is thrown, resulting in a failing test.
+			 */
+			await new Promise<void>(resolve => resolve())
+
+			expect(mockErrorCallback).toHaveBeenCalledWith(expect.any(Error))
+		})
+
+		it('handles errors with captureRejections and emits an event using the given `capturedRejectionEvent`', async () => {
+			const errorEmitter = new EventEmitter<MyEvents>({
+				captureRejections: true,
+				capturedRejectionEvent: 'custom-error',
+			})
+			const mockErrorCallback = vi.fn()
+
+			errorEmitter.on('custom-error', mockErrorCallback)
+
+			errorEmitter.on('erroredEvent', () => {
+				throw new Error('Test error')
+			})
+
+			errorEmitter.emit('erroredEvent', 'Hello, World!')
+
+			expect(mockErrorCallback).toHaveBeenCalledWith(expect.any(Error))
+		})
+
+		it('handles errors with captureRejections and emits a transformed error with given `transformError`', async () => {
+			const errorEmitter = new EventEmitter<MyEvents>({
+				captureRejections: true,
+				transformError(): string {
+					return 'transformed-error'
+				},
+			})
+			const mockErrorCallback = vi.fn()
+
+			errorEmitter.on('error', mockErrorCallback)
+
+			errorEmitter.on('erroredEvent', () => {
+				throw new Error('Test error')
+			})
+
+			errorEmitter.emit('erroredEvent', 'Hello, World!')
+
+			expect(mockErrorCallback).toHaveBeenCalledWith('transformed-error')
+		})
+
+		it("doesn't emit `error` event with `captureRejections` when an error is thrown in an `error` event listener avoiding infinite loop", () => {
+			let mockErrorCallback
+
+			const callback = (): void => {
+				const errorEmitter = new EventEmitter<MyEvents>({ captureRejections: true })
+
+				errorEmitter.on('erroredEvent', () => {
+					throw new Error('Test error')
+				})
+
+				mockErrorCallback = vi.fn(error => {
+					throw new Error('Re-thrown error', { cause: error })
+				})
+
+				errorEmitter.on('error', mockErrorCallback)
+				errorEmitter.emit('erroredEvent', 'Hello, World!')
+			}
+
+			try {
+				callback()
+			} catch (err) {
+				const error = err as Error
+				expect(error).toEqual(new Error('Re-thrown error', { cause: new Error('Test error') }))
+				expect(mockErrorCallback).toHaveBeenCalledTimes(1)
+			}
+		})
+
+		it('re-throws errors when captureRejections is `false` or not set', () => {
+			const errorEmitter = new EventEmitter<MyEvents>()
+
+			errorEmitter.on('erroredEvent', () => {
+				throw new Error('Test error')
+			})
+
+			expect(() => errorEmitter.emit('erroredEvent', 'Hello, World!')).toThrow('Test error')
+		})
+
+		it('re-throws errors when captureRejections is `false` with given `transformError`', async () => {
+			const errorEmitter = new EventEmitter<MyEvents>({
+				transformError(): string {
+					return 'transformed-error'
+				},
+			})
+
+			errorEmitter.on('erroredEvent', () => {
+				throw new Error('Test error')
+			})
+
+			expect(() => errorEmitter.emit('erroredEvent', 'Hello, World!')).toThrow('transformed-error')
 		})
 	})
 
@@ -391,6 +421,73 @@ describe('EventEmitter', () => {
 			emitter.removeAllListeners('event', mockCallback2)
 			expect(emitter.listenerCount('event')).toBe(1)
 			expect(emitter.listenerCount('event2')).toBe(2)
+		})
+	})
+
+	describe('EventEmitter.pauseEvents()', () => {
+		it('updates internal state to prevent dispatching new events', () => {
+			emitter.pauseEvents()
+			expect(emitter.eventsPaused).toBe(true)
+		})
+
+		it('allows pausing specific events', () => {
+			emitter.pauseEvents('event')
+			emitter.pauseEvents('event2')
+			expect(emitter.eventsPaused).toBe(false)
+			expect(emitter.pausedEvents?.['event']).toBe(true)
+			expect(emitter.pausedEvents?.['event2']).toBe(true)
+		})
+	})
+
+	describe('EventEmitter.resumeEvents()', () => {
+		it('updates internal state to resume event dispatch', () => {
+			emitter.resumeEvents()
+			expect(emitter.eventsPaused).toBe(false)
+		})
+
+		it('resumes specific events', () => {
+			const listener = vi.fn()
+			const listener2 = vi.fn()
+
+			emitter.on('event', listener)
+			emitter.on('event2', listener2)
+
+			emitter.pauseEvents()
+
+			emitter.emit('event', 'message')
+			emitter.emit('event2')
+
+			expect(listener).not.toHaveBeenCalled()
+			expect(listener2).not.toHaveBeenCalled()
+
+			emitter.resumeEvents('event')
+
+			emitter.emit('event', 'message')
+			emitter.emit('event2')
+
+			expect(listener).toHaveBeenCalled()
+			expect(listener2).not.toHaveBeenCalled()
+		})
+
+		it('ensures previously specific paused events get resumed', () => {
+			const listener = vi.fn()
+
+			emitter.on('event', listener)
+
+			// pause specific event
+			emitter.pauseEvents('event')
+
+			emitter.emit('event', 'message')
+
+			expect(listener).not.toHaveBeenCalled()
+
+			// resume all events
+			emitter.resumeEvents()
+
+			emitter.emit('event', 'message')
+
+			expect(emitter.pausedEvents).toBeUndefined()
+			expect(listener).toHaveBeenCalled()
 		})
 	})
 

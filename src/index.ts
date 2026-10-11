@@ -136,6 +136,40 @@ export class EventEmitter<T extends EventsMap<T> = DefaultEventMap> {
 	private transformError: TransformErrorHandler
 
 	/**
+	 * Indicates whether the event emitter is paused or not.
+	 *
+	 */
+	protected _eventsPaused: boolean = false
+	/**
+	 * Indicates whether the event emitter is paused or not.
+	 *
+	 */
+	public get eventsPaused(): typeof this._eventsPaused {
+		return this._eventsPaused
+	}
+
+	protected set eventsPaused(value: typeof this._eventsPaused) {
+		this._eventsPaused = value
+	}
+
+	/**
+	 * A map of paused events.
+	 *
+	 */
+	protected _pausedEvents?: Partial<Record<keyof T, boolean>> = undefined
+	/**
+	 * A map of paused events.
+	 *
+	 */
+	public get pausedEvents(): typeof this._pausedEvents {
+		return this._pausedEvents
+	}
+
+	protected set pausedEvents(value: typeof this._pausedEvents) {
+		this._pausedEvents = value
+	}
+
+	/**
 	 * Creates a new instance of EventEmitter.
 	 *
 	 * @param options An object defining custom configurations. See {@link EventEmitterOptions} for more info.
@@ -200,7 +234,28 @@ export class EventEmitter<T extends EventsMap<T> = DefaultEventMap> {
 	 * ```
 	 */
 	public emit<K extends keyof T>(event: K, ...args: Args<K, T>): boolean {
-		if (!this.events[event]) {
+		if (!this.events[event]) return false
+
+		/**
+		 * Indicates that the event has been resumed via `EventEmitter.resumeEvents( event )`.
+		 *
+		 */
+		const eventHasBeenResumed =
+			this.pausedEvents && event in this.pausedEvents && !this.pausedEvents[event]
+
+		/**
+		 * Do not emit if all events have been paused and the event hasn't been resumed.
+		 *
+		 */
+		if (this.eventsPaused && !eventHasBeenResumed) {
+			return false
+		}
+
+		/**
+		 * Do not emit if the event has been paused.
+		 *
+		 */
+		if (this.pausedEvents?.[event]) {
 			return false
 		}
 
@@ -476,6 +531,42 @@ export class EventEmitter<T extends EventsMap<T> = DefaultEventMap> {
 	}
 
 	/** --- Miscellaneous --- */
+
+	/**
+	 * Pause events.
+	 *
+	 * @returns A reference to the `EventEmitter`, so that calls can be chained.
+	 */
+	public pauseEvents<K extends keyof T>(event?: K): this {
+		if (event) {
+			this.pausedEvents ||= {}
+			this.pausedEvents[event] = true
+			return this
+		}
+
+		this.eventsPaused = true
+		this.pausedEvents = undefined
+
+		return this
+	}
+
+	/**
+	 * Resume events.
+	 *
+	 * @returns A reference to the `EventEmitter`, so that calls can be chained.
+	 */
+	public resumeEvents<K extends keyof T>(event?: K): this {
+		if (event) {
+			this.pausedEvents ||= {}
+			this.pausedEvents[event] = false
+			return this
+		}
+
+		this.eventsPaused = false
+		this.pausedEvents = undefined
+
+		return this
+	}
 
 	/**
 	 * Returns an array listing the events for which the emitter has registered listeners.
