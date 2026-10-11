@@ -108,6 +108,13 @@ export interface EventEmitterOptions {
 	 * @default 'error'
 	 */
 	capturedRejectionEvent?: string
+	/**
+	 * A custom function that transform caught `Error` to something else.
+	 *
+	 * @param error The caught `Error`.
+	 * @returns The transformed `error`.
+	 */
+	transformError?: TransformErrorHandler
 }
 
 /**
