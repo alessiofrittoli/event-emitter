@@ -2,6 +2,7 @@
 	"name": "@alessiofrittoli/event-emitter",
 	"version": "1.6.0",
 	"description": "Cross-env TypeScript Event Emitter",
+	"type": "module",
 	"author": {
 		"name": "Alessio Frittoli",
 		"email": "info@alessiofrittoli.it",
