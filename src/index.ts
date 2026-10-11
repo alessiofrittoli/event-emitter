@@ -1,126 +1,19 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import type {
+	Args,
+	DefaultEventMap,
+	EventsMap,
+	OnceListenersMap,
+	OnceListenerWrapper,
+	EventEmitterOptions,
+	Listener,
+} from '@/types'
 
-/**
- * Options for configuring the EventEmitter.
- */
-export interface EventEmitterOptions
-{
-	/**
-	 * Indicates whether the EventEmitter should capture and handle promise rejections.
-	 * If set to true, the EventEmitter will automatically capture and handle any promise rejections
-	 * that occur within event listeners.
-	 * 
-	 * @default false
-	 */
-	captureRejections?: boolean
-}
-
-
-/**
- * A tuple type that represents a rest parameter of any type.
- * This type can be used to define a function parameter that accepts any number of arguments of any type.
- */
-export type AnyRest = [ ...args: any[] ]
-
-
-/**
- * A utility type that resolves to a specific type based on the provided keys and event map.
- *
- * @template K The key representing the event name.
- * @template T The event map type.
- *
- * If `T` extends `DefaultEventMap`, it resolves to `AnyRest`.
- * Otherwise, if `K` is a key in `T`, it resolves to the type of the event arguments for that key.
- * If `K` is not a key in `T`, it resolves to `never`.
- */
-export type Args<K, T> = T extends DefaultEventMap ? AnyRest : (
-	K extends keyof T ? T[ K ] : never
-)
-
-
-/**
- * Represents a default event map where each event name (key) is associated with a tuple containing a single element of type `never`.
- */
-export type DefaultEventMap = Record<string, [ never ]>
-
-
-/**
- * A map of event names to their respective argument types.
- * 
- * This type is used to define the structure of events and their associated data.
- * Each key in the map represents an event name, and the value is an array of 
- * argument types that the event handler will receive when the event is emitted.
- */
-export type EventsMap<T> = Record<keyof T, any[]> | DefaultEventMap
-
-
-/**
- * Type definition for an event handler function.
- *
- * @template T The event map type that defines the events and their corresponding argument types.
- * @template K The specific event key within the event map. Defaults to any key of the event map.
- *
- * @param args The arguments passed to the event handler, corresponding to the event key.
- */
-export type Listener<
-	T extends EventsMap<T>,
-	K extends keyof T = keyof T
-> = ( ...args: Args<K, T> ) => unknown | Promise<unknown>
-
-
-/**
- * A wrapper interface for a listener that should be invoked only once.
- *
- * @template T The type of the events map.
- * @template K The type of the event key, defaults to the keys of the events map.
- *
- * @param args The arguments to be passed to the listener.
- * @returns The result of the listener execution, which can be a value or a promise.
- *
- * @property {Listener<T, K>} listener The actual listener function that will be invoked.
- */
-export interface OnceListenerWrapper<
-	T extends EventsMap<T>,
-	K extends keyof T = keyof T
->
-{
-	( ...args: Args<K, T> ): unknown | Promise<unknown>
-	/** The actual listener function that will be invoked. */
-	listener: Listener<T, K>
-}
-
-
-/**
- * A specialized Map interface for managing "once" listeners in an event emitter.
- * 
- * @template T The type of the events map.
- * @template K The keys of the events map, defaulting to all keys of T.
- */
-interface OnceListenersMap<
-	T extends EventsMap<T>,
-	K extends keyof T = keyof T,
-> extends Map<K, OnceListenerWrapper<T, K>[]>
-{
-	/**
-	 * Executes a provided function once per each key/value pair in the Map, in insertion order.
-	 */
-	forEach<K extends keyof T>( callbackfn: ( value: OnceListenerWrapper<T, K>[], key: K, map: Map<K, OnceListenerWrapper<T, K>[]> ) => void, thisArg?: any ): void
-	/**
-	 * Returns a specified element from the Map object. If the value that is associated to the provided key is an object, then you will get a reference to that object and any change made to that object will effectively modify it inside the Map.
-	 * @returns Returns the element associated with the specified key. If no element is associated with the specified key, undefined is returned.
-	 */
-	get<K extends keyof T>( key: K ): OnceListenerWrapper<T, K>[] | undefined
-	/**
-	 * Adds a new element with a specified key and value to the Map. If an element with the same key already exists, the element will be updated.
-	 */
-	set<K extends keyof T>( key: K, value: OnceListenerWrapper<T, K>[] ): this
-}
-
+export type * from '@/types'
 
 /**
  * The `EventEmitter` class provides a mechanism to handle events and their listeners.
  * It allows you to register event listeners, emit events, and manage the listeners for those events.
- * 
+ *
  * This class is an exact implementation of the `EventEmitter` class from '@alessiofrittoli/event-emitter'
  * but it is supported on different environments like 'Browser', 'Edge Runtime' and 'Node.js' of course.
  *
@@ -129,24 +22,23 @@ interface OnceListenersMap<
  * @example
  * ```ts
  * import { EventEmitter } from '@alessiofrittoli/event-emitter'
- * 
+ *
  * interface MyEvents
  * {
  *   event1: [ string ]
  *   event2: [ number, boolean ]
  * }
- * 
+ *
  * const emitter = new EventEmitter<MyEvents>()
- * 
+ *
  * emitter.on( 'event1', arg1 => {
  * 	console.log( `event1 received with arg: ${ arg1 }` )
  * } )
- * 
+ *
  * emitter.emit( 'event1', 'Hello, World!' )
  * ```
  */
-export class EventEmitter<T extends EventsMap<T> = DefaultEventMap>
-{
+export class EventEmitter<T extends EventsMap<T> = DefaultEventMap> {
 	/**
 	 * By default, a maximum of `10` listeners can be registered for any single
 	 * event. This limit can be changed for individual `EventEmitter` instances
@@ -184,8 +76,7 @@ export class EventEmitter<T extends EventsMap<T> = DefaultEventMap>
 	 * listeners, respectively.
 	 * Its `name` property is set to `'MaxListenersExceededWarning'`
 	 */
-	static defaultMaxListeners = 10
-
+	public static defaultMaxListeners = 10
 
 	/**
 	 * The maximum number of listeners that can be registered for an event.
@@ -194,20 +85,17 @@ export class EventEmitter<T extends EventsMap<T> = DefaultEventMap>
 	 */
 	private maxListeners: number = EventEmitter.defaultMaxListeners
 
-
-	
 	/**
 	 * A map of event names to their respective listeners.
-	 * 
+	 *
 	 * @template T - An interface that defines the event names and their corresponding payload types.
 	 * @property {Object.<keyof T, (Listener<T, K> | OnceListenerWrapper<T, K>)[]>} events An object where
 	 * the keys are event names (from the interface T) and the values are arrays of listeners.
 	 * Each listener can either be a regular listener or a once listener wrapper (those registered with `.once()` method).
 	 */
 	private events: {
-		[ K in keyof T ]?: ( Listener<T, K> | OnceListenerWrapper<T, K>)[]
+		[K in keyof T]?: (Listener<T, K> | OnceListenerWrapper<T, K>)[]
 	} = {}
-
 
 	/**
 	 * A map that tracks whether a warning has been emitted for each key in the type `T`.
@@ -215,9 +103,8 @@ export class EventEmitter<T extends EventsMap<T> = DefaultEventMap>
 	 * If a key's value is `true`, it indicates that a warning has already been emitted for that key.
 	 */
 	private warningEmitted: {
-		[ K in keyof T ]?: boolean
+		[K in keyof T]?: boolean
 	} = {}
-
 
 	/**
 	 * A map to store event handlers that should be called only once.
@@ -226,7 +113,6 @@ export class EventEmitter<T extends EventsMap<T> = DefaultEventMap>
 	 */
 	private onceListeners: OnceListenersMap<T> = new Map()
 
-
 	/**
 	 * Indicates whether the event emitter should capture and handle promise rejections.
 	 * When set to `true`, the event emitter will automatically handle any promise rejections
@@ -234,22 +120,29 @@ export class EventEmitter<T extends EventsMap<T> = DefaultEventMap>
 	 */
 	private captureRejections: boolean
 
+	/**
+	 * The event name used to emit the captured rejection.
+	 *
+	 */
+	private capturedRejectionEvent: string
 
 	/**
-	 * Creates an instance of EventEmitter.
+	 * Creates a new instance of EventEmitter.
 	 *
-	 * @param options An optional object containing properties to configure the EventEmitter instance.
-	 * @param options.captureRejections A boolean indicating whether to capture promise rejections. Defaults to `false`.
+	 * @param options An object defining custom configurations. See {@link EventEmitterOptions} for more info.
 	 */
-	constructor( { captureRejections }: EventEmitterOptions = {} )
-	{
-		this.captureRejections = captureRejections ?? false
+	public constructor(options: EventEmitterOptions = {}) {
+		const { captureRejections = false, capturedRejectionEvent = 'error' } = options
 
-		if ( this.maxListeners < 0 ) {
-			throw new RangeError( `The value of "defaultMaxListeners" is out of range. It must be >= 0. Received ${ this.maxListeners }` )
+		this.captureRejections = captureRejections
+		this.capturedRejectionEvent = capturedRejectionEvent
+
+		if (this.maxListeners < 0) {
+			throw new RangeError(
+				`The value of "defaultMaxListeners" is out of range. It must be >= 0. Received ${this.maxListeners}`,
+			)
 		}
 	}
-
 
 	/**
 	 * Synchronously calls each of the listeners registered for the event named `event`, in the order they were registered, passing the supplied arguments
@@ -265,12 +158,12 @@ export class EventEmitter<T extends EventsMap<T> = DefaultEventMap>
 	 * myEmitter.on( 'event', function firstListener() {
 	 *   console.log( 'Helloooo! first listener' )
 	 * } )
-	 * 
+	 *
 	 * // Second listener
 	 * myEmitter.on( 'event', function secondListener( arg1, arg2 ) {
 	 *   console.log( `event with parameters ${ arg1 }, ${ arg2 } in second listener` )
 	 * } )
-	 * 
+	 *
 	 * // Third listener
 	 * myEmitter.on( 'event', function thirdListener( ...args ) {
 	 *   const parameters = args.join( ', ' )
@@ -292,29 +185,34 @@ export class EventEmitter<T extends EventsMap<T> = DefaultEventMap>
 	 * // event with parameters 1, 2, 3, 4, 5 in third listener
 	 * ```
 	 */
-	emit<K extends keyof T>( event: K, ...args: Args<K, T> ): boolean
-	{
-		if ( ! this.events[ event ] ) return false
-		
-		this.events[ event ].forEach( listener => {
+	public emit<K extends keyof T>(event: K, ...args: Args<K, T>): boolean {
+		if (!this.events[event]) {
+			return false
+		}
+
+		this.events[event].forEach(listener => {
 			try {
-				const result = listener( ...args )
-				if ( this.captureRejections && result instanceof Promise && event !== 'error' ) {
-					result.catch( error => this.emit( 'error' as K, ...[ error ] as Args<K, T> ) )
+				const result = listener(...args)
+				if (
+					this.captureRejections &&
+					result instanceof Promise &&
+					event !== this.capturedRejectionEvent
+				) {
+					result.catch(error =>
+						this.emit(this.capturedRejectionEvent as K, ...([error] as Args<K, T>)),
+					)
 				}
-			} catch ( err ) {
-				const error = err as Error
-				if ( this.captureRejections && event !== 'error' ) {
-					this.emit( 'error' as K, ...[ error ] as Args<K, T> )
+			} catch (error) {
+				if (this.captureRejections && event !== this.capturedRejectionEvent) {
+					this.emit(this.capturedRejectionEvent as K, ...([error] as Args<K, T>))
 				} else {
 					throw error
 				}
 			}
-		} )
+		})
 
 		return true
 	}
-
 
 	/**
 	 * Adds the `listener` function to the end of the listeners array for the event
@@ -346,14 +244,12 @@ export class EventEmitter<T extends EventsMap<T> = DefaultEventMap>
 	 * @param event The name of the event.
 	 * @param listener The callback function
 	 */
-	on<K extends keyof T>( event: K, listener: Listener<T, K> )
-	{
-		this.events[ event ] ||= []
-		this.events[ event ].push( listener )
+	public on<K extends keyof T>(event: K, listener: Listener<T, K>): this {
+		this.events[event] ||= []
+		this.events[event].push(listener)
 
-		return this.emitMaxListenersExceeded( event )
+		return this.emitMaxListenersExceeded(event)
 	}
-
 
 	/**
 	 * Adds the `listener` function to the _beginning_ of the listeners array for the
@@ -368,18 +264,16 @@ export class EventEmitter<T extends EventsMap<T> = DefaultEventMap>
 	 * ```
 	 *
 	 * Returns a reference to the `EventEmitter`, so that calls can be chained.
-	 * 
+	 *
 	 * @param event The name of the event.
 	 * @param listener The callback function
 	 */
-	prepend<K extends keyof T>( event: K, listener: Listener<T, K> )
-	{
-		this.events[ event ] ||= []
-		this.events[ event ].unshift( listener )
+	public prepend<K extends keyof T>(event: K, listener: Listener<T, K>): this {
+		this.events[event] ||= []
+		this.events[event].unshift(listener)
 
-		return this.emitMaxListenersExceeded( event )
+		return this.emitMaxListenersExceeded(event)
 	}
-
 
 	/**
 	 * Adds a **one-time** `listener` function for the event named `event`. The
@@ -409,15 +303,9 @@ export class EventEmitter<T extends EventsMap<T> = DefaultEventMap>
 	 * @param event The name of the event.
 	 * @param listener The callback function
 	 */
-	once<K extends keyof T>( event: K, listener: Listener<T, K> )
-	{
-		return (
-			this.on(
-				event, this.createOnceWrapper( event, listener )
-			)
-		)
+	public once<K extends keyof T>(event: K, listener: Listener<T, K>): this {
+		return this.on(event, this.createOnceWrapper(event, listener))
 	}
-
 
 	/**
 	 * Adds a **one-time**`listener` function for the event named `event` to the _beginning_ of the listeners array. The next time `event` is triggered, this
@@ -430,19 +318,13 @@ export class EventEmitter<T extends EventsMap<T> = DefaultEventMap>
 	 * ```
 	 *
 	 * Returns a reference to the `EventEmitter`, so that calls can be chained.
-	 * 
+	 *
 	 * @param event The name of the event.
 	 * @param listener The callback function
 	 */
-	prependOnce<K extends keyof T>( event: K, listener: Listener<T, K> )
-	{
-		return (
-			this.prepend(
-				event, this.createOnceWrapper( event, listener )
-			)
-		)
+	public prependOnce<K extends keyof T>(event: K, listener: Listener<T, K>): this {
+		return this.prepend(event, this.createOnceWrapper(event, listener))
 	}
-
 
 	/**
 	 * Removes the specified `listener` from the listener array for the event named `event`.
@@ -524,28 +406,25 @@ export class EventEmitter<T extends EventsMap<T> = DefaultEventMap>
 	 *
 	 * Returns a reference to the `EventEmitter`, so that calls can be chained.
 	 */
-	off<K extends keyof T>( event: K, listener: Listener<T, K> )
-	{
-		if ( ! this.events[ event ] ) return this
-		
-		const onceListeners		= this.onceListeners.get( event ) || []
-		const onceWrappers		= onceListeners.filter( wrapper => wrapper.listener === listener )
-		const originalListener	= onceWrappers?.pop() || listener
-		const popped			= onceListeners.filter( wrapper => wrapper !== originalListener )
-		this.events[ event ]	= this.events[ event ].filter( l => l !== originalListener )
+	public off<K extends keyof T>(event: K, listener: Listener<T, K>): this {
+		if (!this.events[event]) return this
 
-		if ( this.events[ event ].length <= 0 ) delete this.events[ event ]
-		
-		if ( popped.length <= 0 ) {
-			this.onceListeners.delete( event )
+		const onceListeners = this.onceListeners.get(event) || []
+		const onceWrappers = onceListeners.filter(wrapper => wrapper.listener === listener)
+		const originalListener = onceWrappers?.pop() || listener
+		const popped = onceListeners.filter(wrapper => wrapper !== originalListener)
+		this.events[event] = this.events[event].filter(l => l !== originalListener)
+
+		if (this.events[event].length <= 0) delete this.events[event]
+
+		if (popped.length <= 0) {
+			this.onceListeners.delete(event)
 		} else {
-			this.onceListeners.set( event, popped )
+			this.onceListeners.set(event, popped)
 		}
 
 		return this
-
 	}
-
 
 	/**
 	 * Removes all listeners, or those of the specified `event`.
@@ -556,22 +435,19 @@ export class EventEmitter<T extends EventsMap<T> = DefaultEventMap>
 	 *
 	 * Returns a reference to the `EventEmitter`, so that calls can be chained.
 	 */
-	removeAllListeners<K extends keyof T>( event?: K, listener?: Listener<T, K> )
-	{
-		if ( event ) {
-
-			if ( listener ) {
-				this.rawListeners( event )
-					.map( l => {
-						if ( l === listener || ( 'listener' in l && l.listener === listener ) ) {
-							this.off( event, listener )
-						}
-					} )
+	public removeAllListeners<K extends keyof T>(event?: K, listener?: Listener<T, K>): this {
+		if (event) {
+			if (listener) {
+				this.rawListeners(event).map(l => {
+					if (l === listener || ('listener' in l && l.listener === listener)) {
+						this.off(event, listener)
+					}
+				})
 				return this
 			}
 
-			delete this.events[ event ]
-			this.onceListeners.delete( event )
+			delete this.events[event]
+			this.onceListeners.delete(event)
 			return this
 		}
 		this.events = {}
@@ -580,31 +456,6 @@ export class EventEmitter<T extends EventsMap<T> = DefaultEventMap>
 	}
 
 	/** --- Miscellaneous --- */
-
-	/**
-	 * Creates a wrapper function for a given event listener that ensures the listener is only called once.
-	 * The wrapper function will automatically remove the listener after it has been called.
-	 *
-	 * @template K The type of the event key.
-	 * @param event The event to listen for.
-	 * @param listener The event handler function to be called once.
-	 * @returns The wrapper function that will call the listener and then remove itself.
-	 */
-	private createOnceWrapper<K extends keyof T>( event: K, listener: Listener<T, K> )
-	{
-		const onceWrapper: OnceListenerWrapper<T, K> = ( ...args ) => {
-			this.off( event, onceWrapper )
-			listener( ...args )
-		}
-		onceWrapper.listener = listener
-
-		const onceEventListeners = this.onceListeners.get( event ) || []
-		onceEventListeners.push( onceWrapper )
-		this.onceListeners.set( event, onceEventListeners )
-
-		return onceWrapper
-	}
-
 
 	/**
 	 * Returns an array listing the events for which the emitter has registered listeners.
@@ -620,11 +471,9 @@ export class EventEmitter<T extends EventsMap<T> = DefaultEventMap>
 	 * // Prints: [ 'foo', 'bar' ]
 	 * ```
 	 */
-	eventNames()
-	{
-		return Object.keys( this.events ) as ( keyof T )[]
+	public eventNames(): (keyof T)[] {
+		return Object.keys(this.events) as (keyof T)[]
 	}
-
 
 	/**
 	 * By default `EventEmitter`s will print a warning if more than `10` listeners are
@@ -634,47 +483,37 @@ export class EventEmitter<T extends EventsMap<T> = DefaultEventMap>
 	 *
 	 * Returns a reference to the `EventEmitter`, so that calls can be chained.
 	 */
-	setMaxListeners( n: number )
-	{
+	public setMaxListeners(n: number): this {
 		this.maxListeners = n
 		return this
 	}
-
 
 	/**
 	 * Returns the current max listener value for the `EventEmitter` which is either
 	 * set by `emitter.setMaxListeners(n)` or defaults to {@link defaultMaxListeners}.
 	 */
-	getMaxListeners()
-	{
+	public getMaxListeners(): number {
 		return this.maxListeners
 	}
-
 
 	/**
 	 * Returns the number of listeners listening for the event named `event`.
 	 * If `listener` is provided, it will return how many times the listener is found
 	 * in the list of the listeners of the event.
-	 * 
+	 *
 	 * @param event The name of the event being listened for
 	 * @param listener The event handler function
 	 */
-	listenerCount<K extends keyof T>( event: K, listener?: Listener<T, K> )
-	{
-		return (
-			! this.events[ event ] ? 0 : (
-				! listener
-					? this.events[ event ].length
-					: (
-						this.events[ event ].filter(
-							l => l === listener || ( 'listener' in l && l.listener === listener )
-						).length
-					)
-			)
-		)
+	public listenerCount<K extends keyof T>(event: K, listener?: Listener<T, K>): number {
+		return !this.events[event]
+			? 0
+			: !listener
+				? this.events[event].length
+				: this.events[event].filter(
+						l => l === listener || ('listener' in l && l.listener === listener),
+					).length
 	}
-	
-	
+
 	/**
 	 * Returns a copy of the array of listeners for the event named `event`.
 	 *
@@ -686,15 +525,11 @@ export class EventEmitter<T extends EventsMap<T> = DefaultEventMap>
 	 * // Prints: [ [Function (anonymous)] ]
 	 * ```
 	 */
-	listeners<K extends keyof T>( event: K ): Listener<T, K>[]
-	{
-		return (
-			this.rawListeners( event ).map( listener => (
-				'listener' in listener ? listener.listener : listener
-			) )
+	public listeners<K extends keyof T>(event: K): Listener<T, K>[] {
+		return this.rawListeners(event).map(listener =>
+			'listener' in listener ? listener.listener : listener,
 		)
 	}
-
 
 	/**
 	 * Returns a copy of the array of listeners for the event named `event`,
@@ -725,11 +560,35 @@ export class EventEmitter<T extends EventsMap<T> = DefaultEventMap>
 	 * emitter.emit( 'log' )
 	 * ```
 	 */
-	rawListeners<K extends keyof T>( event: K ): ( Listener<T, K> | OnceListenerWrapper<T, K> )[]
-	{
-		return this.events[ event ] ? [ ...this.events[ event ] ] : []
+	public rawListeners<K extends keyof T>(event: K): (Listener<T, K> | OnceListenerWrapper<T, K>)[] {
+		return this.events[event] ? [...this.events[event]] : []
 	}
 
+	/**
+	 * Creates a wrapper function for a given event listener that ensures the listener is only called once.
+	 * The wrapper function will automatically remove the listener after it has been called.
+	 *
+	 * @template K The type of the event key.
+	 * @param event The event to listen for.
+	 * @param listener The event handler function to be called once.
+	 * @returns The wrapper function that will call the listener and then remove itself.
+	 */
+	private createOnceWrapper<K extends keyof T>(
+		event: K,
+		listener: Listener<T, K>,
+	): OnceListenerWrapper<T, K> {
+		const onceWrapper: OnceListenerWrapper<T, K> = (...args) => {
+			this.off(event, onceWrapper)
+			listener(...args)
+		}
+		onceWrapper.listener = listener
+
+		const onceEventListeners = this.onceListeners.get(event) || []
+		onceEventListeners.push(onceWrapper)
+		this.onceListeners.set(event, onceEventListeners)
+
+		return onceWrapper
+	}
 
 	/**
 	 * Emits a warning if the number of listeners for a given event exceeds the maximum allowed listeners.
@@ -752,68 +611,62 @@ export class EventEmitter<T extends EventsMap<T> = DefaultEventMap>
 	 *
 	 * If any of these conditions are not met, the method returns early without emitting a warning.
 	 */
-	private emitMaxListenersExceeded<K extends keyof T>( event: K )
-	{
-		if ( this.maxListeners === 0 ) return this
-		if ( this.maxListeners === Infinity ) return this
-		if ( this.warningEmitted[ event ] ) return this
-		if ( ! this.events[ event ] ) return this
-		if ( this.events[ event ].length <= this.maxListeners ) return this
-		
-		this.warningEmitted[ event ] = true
+	private emitMaxListenersExceeded<K extends keyof T>(event: K): this {
+		if (this.maxListeners === 0) return this
+		if (this.maxListeners === Infinity) return this
+		if (this.warningEmitted[event]) return this
+		if (!this.events[event]) return this
+		if (this.events[event].length <= this.maxListeners) return this
 
-		const id		= 'MaxListenersExceededWarning'
-		const message	= (
-			'Possible EventEmitter memory leak detected. '
-			+ `${ this.events[ event ].length } ${ String( event ) } listeners added to [${ this.constructor.name }]. `
-			+ `MaxListeners is ${ this.maxListeners }. Use emitter.setMaxListeners() to increase limit`
-		)
+		this.warningEmitted[event] = true
 
-		if ( typeof process !== 'undefined' ) {
-			process.emitWarning( message, id )
+		const id = 'MaxListenersExceededWarning'
+		const message =
+			'Possible EventEmitter memory leak detected. ' +
+			`${this.events[event].length} ${String(event)} listeners added to [${this.constructor.name}]. ` +
+			`MaxListeners is ${this.maxListeners}. Use emitter.setMaxListeners() to increase limit`
+
+		if (typeof process !== 'undefined') {
+			process.emitWarning(message, id)
 			return this
 		}
 
-		console.warn( { id, message } )
+		console.warn({ id, message })
 
 		return this
 	}
-
 
 	/** --- Aliases --- */
 
 	/**
 	 * Alias for `emitter.on( event, listener )`.
+	 *
 	 */
-	addListener<K extends keyof T>( event: K, listener: Listener<T, K> )
-	{
-		return this.on( event, listener )
+	public addListener<K extends keyof T>(event: K, listener: Listener<T, K>): this {
+		return this.on(event, listener)
 	}
-
 
 	/**
 	 * Alias for `emitter.prepend( event, listener )`.
+	 *
 	 */
-	prependListener<K extends keyof T>( event: K, listener: Listener<T, K> )
-	{
-		return this.prepend( event, listener )
+	public prependListener<K extends keyof T>(event: K, listener: Listener<T, K>): this {
+		return this.prepend(event, listener)
 	}
-
 
 	/**
 	 * Alias for `emitter.prependOnce( event, listener )`.
+	 *
 	 */
-	prependOnceListener<K extends keyof T>( event: K, listener: Listener<T, K> )
-	{
-		return this.prependOnce( event, listener )
+	public prependOnceListener<K extends keyof T>(event: K, listener: Listener<T, K>): this {
+		return this.prependOnce(event, listener)
 	}
-	
 
 	/**
 	 * Alias for `emitter.off( event, listener )`.
+	 *
 	 */
-	removeListener<K extends keyof T>( event: K, listener: Listener<T, K> )
-	{
-		return this.off( event, listener )
+	public removeListener<K extends keyof T>(event: K, listener: Listener<T, K>): this {
+		return this.off(event, listener)
 	}
 }
