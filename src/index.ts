@@ -125,7 +125,7 @@ export class EventEmitter<T extends EventsMap<T> = DefaultEventMap> {
 	 * The event name used to emit the captured rejection.
 	 *
 	 */
-	private capturedRejectionEvent: string
+	private capturedRejectionEvent: keyof T | 'error'
 
 	/**
 	 * A custom function that transform caught `Error` to something else.
@@ -133,7 +133,7 @@ export class EventEmitter<T extends EventsMap<T> = DefaultEventMap> {
 	 * @param error The caught `Error`.
 	 * @returns The transformed `error`.
 	 */
-	private transformError: TransformErrorHandler
+	private transformError?: TransformErrorHandler
 
 	/**
 	 * Indicates whether the event emitter is paused or not.
@@ -174,12 +174,8 @@ export class EventEmitter<T extends EventsMap<T> = DefaultEventMap> {
 	 *
 	 * @param options An object defining custom configurations. See {@link EventEmitterOptions} for more info.
 	 */
-	public constructor(options: EventEmitterOptions = {}) {
-		const {
-			captureRejections = false,
-			capturedRejectionEvent = 'error',
-			transformError = (error): unknown => error,
-		} = options
+	public constructor(options: EventEmitterOptions<T> = {}) {
+		const { captureRejections = false, capturedRejectionEvent = 'error', transformError } = options
 
 		this.captureRejections = captureRejections
 		this.capturedRejectionEvent = capturedRejectionEvent
@@ -270,7 +266,7 @@ export class EventEmitter<T extends EventsMap<T> = DefaultEventMap> {
 					result.catch(error =>
 						this.emit(
 							this.capturedRejectionEvent as K,
-							...([this.transformError(error)] as Args<K, T>),
+							...([this.transformError?.(error) || error] as Args<K, T>),
 						),
 					)
 				}
@@ -278,10 +274,10 @@ export class EventEmitter<T extends EventsMap<T> = DefaultEventMap> {
 				if (this.captureRejections && event !== this.capturedRejectionEvent) {
 					this.emit(
 						this.capturedRejectionEvent as K,
-						...([this.transformError(error)] as Args<K, T>),
+						...([this.transformError?.(error) || error] as Args<K, T>),
 					)
 				} else {
-					throw this.transformError(error)
+					throw this.transformError?.(error) || error
 				}
 			}
 		})

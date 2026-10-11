@@ -93,7 +93,7 @@ export type TransformErrorHandler = (error: unknown) => unknown
  * Options for configuring the EventEmitter.
  *
  */
-export interface EventEmitterOptions {
+export interface EventEmitterOptions<T extends EventsMap<T> = DefaultEventMap> {
 	/**
 	 * Indicates whether the EventEmitter should capture and handle promise rejections.
 	 * If set to true, the EventEmitter will automatically capture and handle any promise rejections
@@ -107,7 +107,7 @@ export interface EventEmitterOptions {
 	 *
 	 * @default 'error'
 	 */
-	capturedRejectionEvent?: string
+	capturedRejectionEvent?: keyof T
 	/**
 	 * A custom function that transform caught `Error` to something else.
 	 *
