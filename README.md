@@ -9,8 +9,8 @@ A cross-environment implementation of an <code>EventEmitter</code> that works se
   <a href="https://npmjs.org/package/@alessiofrittoli/event-emitter">
     <img src="https://img.shields.io/npm/v/@alessiofrittoli/event-emitter" alt="Latest version"/>
   </a>
-  <a href="https://coveralls.io/github/alessiofrittoli/exception">
-    <img src="https://coveralls.io/repos/github/alessiofrittoli/exception/badge.svg" alt="Test coverage"/>
+  <a href="https://coveralls.io/github/alessiofrittoli/event-emitter">
+    <img src="https://coveralls.io/repos/github/alessiofrittoli/event-emitter/badge.svg" alt="Test coverage"/>
   </a>
   <a href="https://socket.dev/npm/package/@alessiofrittoli/event-emitter/overview">
     <img src="https://socket.dev/api/badge/npm/package/@alessiofrittoli/event-emitter" alt="Socket Security score"/>
@@ -21,7 +21,7 @@ A cross-environment implementation of an <code>EventEmitter</code> that works se
   <a href="https://bundlephobia.com/package/@alessiofrittoli/event-emitter">
     <img src="https://badgen.net/bundlephobia/dependency-count/@alessiofrittoli/event-emitter" alt="Dependencies"/>
   </a>
-  <a href="https://libraries.io/npm/%40alessiofrittoli%2Fexception">
+  <a href="https://libraries.io/npm/%40alessiofrittoli%2Fevent-emitter">
     <img src="https://img.shields.io/librariesio/release/npm/@alessiofrittoli/event-emitter" alt="Dependencies status"/>
   </a>
 </p>
