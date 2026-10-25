@@ -1,6 +1,6 @@
 {
 	"name": "@alessiofrittoli/event-emitter",
-	"version": "1.7.0",
+	"version": "1.8.0",
 	"description": "Cross-env TypeScript Event Emitter",
 	"type": "module",
 	"author": {
@@ -67,7 +67,7 @@
 		"//1b": "******************** DEV - BUILD - LINT - RELEASE *******************",
 		"//1c": "*********************************************************************",
 		"dev": "tsdown --watch",
-		"build": "pnpm lint && pnpm tsc && pnpm tsdown",
+		"build": "pnpm lint && pnpm tsdown",
 		"lint": "oxlint --report-unused-disable-directives --max-warnings 0",
 		"release": "node scripts/release.ts --verbose --npm",
 		"//2a": "*********************************************************************",
