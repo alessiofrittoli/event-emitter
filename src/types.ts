@@ -43,6 +43,7 @@ export type EventsMap<T> = Record<keyof T, unknown[]> | DefaultEventMap
  * @property {Listener<T, K>} listener The actual listener function that will be invoked.
  */
 export interface OnceListenerWrapper<T extends EventsMap<T>, K extends keyof T = keyof T> {
+	// oxlint-disable-next-line typescript/no-redundant-type-constituents
 	(...args: Args<K, T>): unknown | Promise<unknown>
 	/** The actual listener function that will be invoked. */
 	listener: Listener<T, K>
@@ -127,4 +128,5 @@ export interface EventEmitterOptions<T extends EventsMap<T> = DefaultEventMap> {
  */
 export type Listener<T extends EventsMap<T>, K extends keyof T = keyof T> = (
 	...args: Args<K, T>
+	// oxlint-disable-next-line typescript/no-redundant-type-constituents
 ) => unknown | Promise<unknown>
